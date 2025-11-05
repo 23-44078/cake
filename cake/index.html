@@ -1,0 +1,4891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweet Delights - Cake Ordering System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* All your existing CSS styles remain the same */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #ff6b8b;
+            --primary-dark: #e55a78;
+            --secondary: #8b5cf6;
+            --accent: #f59e0b;
+            --light: #fef7ed;
+            --dark: #4a2c2a;
+            --gray: #6b7280;
+            --light-gray: #f3f4f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Login Page Styles */
+        .login-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 12px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            animation: loginSlideIn 1s ease-out;
+        }
+
+        @keyframes loginSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .login-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .login-logo-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 5px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--primary);
+        }
+
+        .login-logo-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .login-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 25px;
+        }
+
+        /* Line-style Login Tabs */
+        .login-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: transparent;
+            border-radius: 0;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .login-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray);
+            transition: var(--transition);
+            border-radius: 0;
+            position: relative;
+            overflow: hidden;
+            font-size: 14px;
+            z-index: 1;
+        }
+
+        .login-tab.active {
+            color: var(--primary);
+        }
+
+        .tab-slider {
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            height: 3px;
+            width: calc(33.33%);
+            background: var(--primary);
+            border-radius: 0;
+            transition: var(--transition);
+            z-index: 0;
+        }
+
+        .login-tab:nth-child(1).active ~ .tab-slider {
+            transform: translateX(0);
+        }
+
+        .login-tab:nth-child(2).active ~ .tab-slider {
+            transform: translateX(100%);
+        }
+
+        .login-tab:nth-child(3).active ~ .tab-slider {
+            transform: translateX(200%);
+        }
+
+        .login-error {
+            color: var(--danger);
+            margin-top: 10px;
+            text-align: center;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: var(--transition);
+            background: white;
+            color: var(--dark);
+        }
+
+        input::placeholder {
+            color: var(--gray);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 139, 0.2);
+        }
+
+        /* Password Field Styles */
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .toggle-password:hover {
+            color: var(--primary);
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .logo-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 5px;
+            box-shadow: 
+                0 10px 20px rgba(0,0,0,0.19), 
+                0 6px 6px rgba(0,0,0,0.23),
+                inset 0 -2px 5px rgba(0,0,0,0.1),
+                inset 0 2px 5px rgba(255,255,255,0.5);
+            animation: pulse 2s infinite;
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 500px;
+        }
+
+        .logo-img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 50%);
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1) rotateY(0deg); }
+            50% { transform: scale(1.05) rotateY(5deg); }
+            100% { transform: scale(1) rotateY(0deg); }
+        }
+
+        .logo-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            transform: translateZ(10px);
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-details {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-type {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .btn {
+            background-color: white;
+            color: var(--primary);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Navigation Styles */
+        nav {
+            background-color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            animation: fadeIn 0.7s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-section {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: transparent;
+            color: var(--gray);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--light-gray);
+            color: var(--dark);
+        }
+
+        .nav-btn.active {
+            background-color: var(--primary);
+            color: white;
+            animation: bounce 0.5s;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 60%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-5px); }
+            80% { transform: translateY(-2px); }
+        }
+
+        /* Main Content Styles */
+        .content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex: 1;
+        }
+
+        .main-content {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            min-height: 500px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-title {
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        /* Mission & Vision Styles */
+        .mission-vision {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .mission-card, .vision-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .mission-card:hover, .vision-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .mission-card {
+            border-left: 5px solid var(--primary);
+        }
+
+        .vision-card {
+            border-left: 5px solid var(--secondary);
+        }
+
+        .mission-vision h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--dark);
+            font-size: 1.1rem;
+        }
+
+        .mission-vision p {
+            line-height: 1.7;
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* Contact Info Styles */
+        .contact-info {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-top: 20px;
+        }
+
+        .contact-info h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+
+        .contact-details {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .contact-item:hover {
+            background-color: rgba(255, 107, 139, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Footer Styles */
+        footer {
+            background: linear-gradient(135deg, var(--dark), #2a1a1a);
+            color: white;
+            padding: 15px 0;
+            margin-top: auto;
+            text-align: center;
+        }
+
+        .footer-bottom {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Menu Grid Styles */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .menu-item {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            background-color: white;
+            animation: zoomIn 0.5s ease;
+        }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item-img {
+            height: 180px;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9f9f9;
+        }
+
+        .menu-item-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .menu-item:hover .menu-item-img img {
+            transform: scale(1.05);
+        }
+
+        .menu-item-content {
+            padding: 15px;
+        }
+
+        .menu-item-title {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .menu-item-desc {
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .menu-item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        .add-to-cart {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .add-to-cart:hover {
+            background-color: var(--primary-dark);
+            transform: scale(1.1);
+        }
+
+        /* Cart Styles */
+        .cart-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .cart-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .cart-item-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .cart-item-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .cart-item-price {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background-color: var(--light-gray);
+            color: var(--dark);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .quantity-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .remove-btn {
+            background-color: transparent;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            margin-left: 15px;
+            transition: var(--transition);
+        }
+
+        .remove-btn:hover {
+            color: var(--danger);
+            transform: scale(1.1);
+        }
+
+        .cart-item-subtotal {
+            font-weight: 600;
+            color: var(--dark);
+            margin-left: 15px;
+            font-size: 14px;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        .cart-summary {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            margin-top: 20px;
+        }
+
+        .cart-total {
+            font-weight: 700;
+            font-size: 18px;
+            margin-top: 20px;
+            text-align: right;
+            padding-top: 20px;
+            border-top: 2px solid var(--light-gray);
+        }
+
+        .checkout-btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .checkout-btn:hover {
+            background-color: #7c3aed;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .checkout-btn:disabled {
+            background-color: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+            font-size: 14px;
+        }
+
+        th {
+            background-color: var(--light-gray);
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background-color: #fef3c7;
+            color: #d97706;
+            animation: pulseWarning 2s infinite;
+        }
+
+        .status-preparing {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+            animation: pulseInfo 2s infinite;
+        }
+
+        .status-ready {
+            background-color: #d1fae5;
+            color: #065f46;
+            animation: pulseSuccess 2s infinite;
+        }
+
+        .status-delivered {
+            background-color: #d1fae5;
+            color: #065f46;
+            animation: tada 1s;
+        }
+
+        .status-cancelled {
+            background-color: #f3e8ff;
+            color: #7e22ce;
+        }
+
+        @keyframes pulseWarning {
+            0% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+            }
+        }
+
+        @keyframes pulseInfo {
+            0% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
+
+        @keyframes pulseSuccess {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        @keyframes tada {
+            0% {
+                transform: scale(1);
+            }
+            10%, 20% {
+                transform: scale(0.9) rotate(-3deg);
+            }
+            30%, 50%, 70%, 90% {
+                transform: scale(1.1) rotate(3deg);
+            }
+            40%, 60%, 80% {
+                transform: scale(1.1) rotate(-3deg);
+            }
+            100% {
+                transform: scale(1) rotate(0);
+            }
+        }
+
+        /* Payment Styles */
+        .payment-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .payment-methods-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .payment-form-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        /* Payment methods side by side */
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .payment-method {
+            flex: 1;
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            animation: zoomIn 0.5s ease;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .payment-method:hover {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .payment-method.selected {
+            border-color: var(--primary);
+            background-color: rgba(255, 107, 139, 0.05);
+            animation: pulse 0.5s;
+        }
+
+        .payment-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+            color: var(--gray);
+        }
+
+        .payment-method.selected .payment-icon {
+            color: var(--primary);
+        }
+
+        /* GCash Payment Styles */
+        .gcash-payment {
+            background: linear-gradient(135deg, #0033A0, #00A3E0);
+            color: white;
+        }
+
+        .gcash-payment .payment-icon {
+            color: white;
+        }
+
+        .gcash-payment.selected {
+            border-color: #0033A0;
+            background: linear-gradient(135deg, #0033A0, #00A3E0);
+        }
+
+        .gcash-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 10px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .gcash-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .gcash-instructions {
+            background-color: rgba(0, 51, 160, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .gcash-instructions ol {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .gcash-instructions li {
+            margin-bottom: 8px;
+        }
+
+        /* User List Styles */
+        .user-list {
+            list-style-type: none;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--light-gray);
+            transition: var(--transition);
+            animation: slideInRight 0.3s ease;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .user-item:hover {
+            background-color: var(--light-gray);
+        }
+
+        .user-role {
+            background-color: var(--light-gray);
+            color: var(--dark);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: var(--transition);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .edit-btn {
+            color: var(--secondary);
+        }
+
+        .edit-btn:hover {
+            background-color: rgba(139, 92, 246, 0.1);
+        }
+
+        .delete-btn {
+            color: var(--danger);
+        }
+
+        .delete-btn:hover {
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Track Order Styles */
+        .tracking-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .order-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 15px;
+            animation: cardSlideIn 0.5s ease-out;
+        }
+
+        @keyframes cardSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+            padding-bottom: 15px;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .order-id {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        .order-date {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .order-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .status-ready {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-pending {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-preparing {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status-delivered {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-cancelled {
+            background-color: #f3e8ff;
+            color: #7e22ce;
+        }
+
+        .order-details {
+            margin-bottom: 15px;
+        }
+
+        .order-detail-row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .order-detail-label {
+            font-weight: 600;
+            width: 100%;
+            color: var(--dark);
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .order-detail-value {
+            flex: 1;
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .tracking-progress {
+            margin-top: 20px;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: var(--light-gray);
+            z-index: 1;
+        }
+
+        .progress-bar {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            height: 4px;
+            background-color: var(--primary);
+            z-index: 2;
+            transition: width 0.5s ease;
+            animation: progressFill 1.5s ease-out;
+        }
+
+        @keyframes progressFill {
+            0% {
+                width: 0%;
+            }
+            100% {
+                width: var(--progress-width);
+            }
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 3;
+        }
+
+        .step-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            transition: var(--transition);
+            position: relative;
+            z-index: 10;
+        }
+
+        .step-active .step-icon {
+            background-color: var(--primary);
+            color: white;
+            animation: bounce 1s infinite, glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 5px var(--primary);
+            }
+            100% {
+                box-shadow: 0 0 20px var(--primary), 0 0 30px var(--primary);
+            }
+        }
+
+        .step-completed .step-icon {
+            background-color: var(--success);
+            color: white;
+            animation: pulseSuccess 1.5s infinite;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+        }
+
+        .step-label {
+            font-size: 12px;
+            color: var(--gray);
+            text-align: center;
+        }
+
+        .step-active .step-label {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .step-completed .step-label {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .tracking-summary {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            margin-top: 20px;
+        }
+
+        /* Order History Styles */
+        .order-history-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .history-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .history-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+            padding-bottom: 15px;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .history-order-id {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        .history-order-date {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .history-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .history-details {
+            margin-bottom: 15px;
+        }
+
+        .history-detail-row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 8px;
+        }
+
+        .history-detail-label {
+            font-weight: 600;
+            width: 100%;
+            color: var(--dark);
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .history-detail-value {
+            flex: 1;
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .order-history-empty {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        /* Manage Users Section */
+        .users-table-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 500px;
+        }
+
+        .users-table th,
+        .users-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+            font-size: 14px;
+        }
+
+        .users-table th {
+            background-color: var(--light-gray);
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .users-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .users-summary {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            margin-top: 20px;
+        }
+
+        /* Manage Items Styles */
+        .manage-items-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+        }
+        
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+        
+        .items-table th,
+        .items-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+            font-size: 14px;
+        }
+        
+        .items-table th {
+            background-color: var(--light-gray);
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .items-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+        
+        .item-image-cell {
+            width: 80px;
+        }
+        
+        .item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        
+        .item-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: var(--transition);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .edit-btn {
+            color: var(--secondary);
+        }
+        
+        .edit-btn:hover {
+            background-color: rgba(139, 92, 246, 0.1);
+        }
+        
+        .delete-btn {
+            color: var(--danger);
+        }
+        
+        .delete-btn:hover {
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+        
+        .add-item-btn {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .add-item-btn:hover {
+            background-color: #0da271;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .items-summary {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            margin-top: 20px;
+        }
+        
+        /* Item Form Modal Styles */
+        .item-form-modal .modal-content {
+            max-width: 600px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .image-preview {
+            width: 100%;
+            max-width: 200px;
+            height: 150px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 10px;
+            border: 1px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light-gray);
+        }
+        
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .image-preview-placeholder {
+            color: var(--gray);
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            background: white;
+            color: var(--dark);
+            padding: 20px 30px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            max-width: 450px;
+            text-align: left;
+            border-left: 5px solid var(--primary);
+            width: 90%;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .notification-icon {
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .notification-success .notification-icon {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .notification-error .notification-icon {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .notification-warning .notification-icon {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .notification-info .notification-icon {
+            background-color: rgba(139, 92, 246, 0.1);
+            color: var(--secondary);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        /* Staff Action Table Styles */
+        .action-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .action-table th, .action-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+            font-size: 14px;
+        }
+
+        .action-table th {
+            background-color: var(--light-gray);
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .action-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .action-table .status-select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--light-gray);
+            background-color: white;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+            padding: 15px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            animation: modalFadeIn 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .close-modal {
+            background: transparent;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--dark);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            font-size: 14px;
+        }
+
+        .modal-btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .modal-btn-secondary {
+            background-color: var(--light-gray);
+            color: var(--dark);
+        }
+
+        .modal-btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .modal-btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        /* Single line location input */
+        .single-line-location {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .single-line-location:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 139, 0.2);
+        }
+
+        /* Contact info in payment */
+        .contact-info-payment {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* Cancel Order Button Styles */
+        .cancel-order-btn {
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .cancel-order-btn:hover {
+            background-color: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .cancel-order-btn:disabled {
+            background-color: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Cancel Order Confirmation Modal */
+        .cancel-confirmation-modal .modal-content {
+            max-width: 500px;
+        }
+
+        .cancel-reason {
+            margin: 15px 0;
+        }
+
+        .cancel-reason textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Mobile Menu Styles */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            z-index: 99;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            padding: 10px 15px;
+        }
+
+        .mobile-nav-buttons {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .mobile-nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 12px;
+            padding: 8px 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: 8px;
+            width: 60px;
+        }
+
+        .mobile-nav-btn.active {
+            color: var(--primary);
+        }
+
+        .mobile-nav-btn i {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        /* README Section Styles */
+        .readme-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .readme-section h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+
+        .readme-content {
+            line-height: 1.7;
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .readme-content h4 {
+            margin: 15px 0 10px;
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        .readme-content ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .readme-content li {
+            margin-bottom: 8px;
+        }
+
+        .readme-content code {
+            background-color: var(--light-gray);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        /* Suggestion Dropdown Styles */
+        .suggestion-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            z-index: 100;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .suggestion-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover {
+            background-color: rgba(255, 107, 139, 0.1);
+        }
+
+        .suggestion-role {
+            font-size: 12px;
+            color: var(--gray);
+            background: var(--light-gray);
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        .suggestion-email {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        /* Create Account Button Styles */
+        .create-account-btn {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .create-account-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Create Account Form Styles */
+        .create-account-form {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .create-account-form.active {
+            display: block;
+        }
+
+        .form-switch {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .form-switch a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .form-switch a:hover {
+            text-decoration: underline;
+        }
+
+        /* Password Requirements Styles */
+        .password-requirements {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .password-requirements ul {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+
+        .requirement-met {
+            color: var(--success);
+        }
+
+        .requirement-not-met {
+            color: var(--danger);
+        }
+
+        /* Cancel History Section Styles */
+        .cancel-history-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .cancel-history-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .cancel-history-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--danger);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .cancel-history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+            padding-bottom: 15px;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .cancel-history-order-id {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        .cancel-history-date {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .cancel-history-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .cancel-history-details {
+            margin-bottom: 15px;
+        }
+
+        .cancel-history-detail-row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 8px;
+        }
+
+        .cancel-history-detail-label {
+            font-weight: 600;
+            width: 100%;
+            color: var(--dark);
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .cancel-history-detail-value {
+            flex: 1;
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .cancel-history-empty {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+            
+            .login-container {
+                padding: 40px;
+            }
+            
+            .login-title {
+                font-size: 28px;
+            }
+            
+            .login-tab {
+                font-size: 16px;
+            }
+            
+            .logo {
+                font-size: 32px;
+                gap: 15px;
+            }
+            
+            .logo-img {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .mission-vision {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+                margin-bottom: 40px;
+            }
+            
+            .mission-card, .vision-card {
+                padding: 30px;
+            }
+            
+            .contact-details {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+            }
+            
+            .main-content {
+                padding: 30px;
+            }
+            
+            .contact-info-payment {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .payment-container {
+                grid-template-columns: 2fr 1fr;
+            }
+            
+            .payment-methods {
+                flex-direction: row;
+            }
+            
+            .order-header, .history-card-header, .cancel-history-header {
+                flex-direction: row;
+            }
+            
+            .order-detail-row, .history-detail-row, .cancel-history-detail-row {
+                flex-direction: row;
+            }
+            
+            .order-detail-label, .history-detail-label, .cancel-history-detail-label {
+                width: 150px;
+                margin-bottom: 0;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .menu-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .mobile-nav {
+                display: none;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-container {
+                display: none;
+            }
+            
+            .mobile-nav {
+                display: block;
+            }
+            
+            .header-content {
+                flex-wrap: wrap;
+            }
+            
+            .user-info {
+                margin-top: 10px;
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .cart-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .cart-item-img {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .cart-item-subtotal {
+                margin-left: 0;
+                margin-top: 15px;
+                align-self: flex-end;
+            }
+            
+            .progress-steps {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .progress-steps::before {
+                display: none;
+            }
+            
+            .progress-bar {
+                display: none;
+            }
+            
+            .progress-step {
+                flex: 1;
+                min-width: 80px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 25px 20px;
+            }
+            
+            .login-logo {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .login-title {
+                font-size: 22px;
+            }
+            
+            .user-details {
+                flex-direction: column;
+                gap: 5px;
+                text-align: center;
+            }
+            
+            .btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .modal-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="login-page" id="login-page">
+        <div class="login-container" id="login-container">
+            <div class="login-logo">
+                <div class="login-logo-img">
+                    <img src="image/Cream & Black Aesthetic Cake & Dessert Logo.png" alt="Sweet Delights Cake Logo">
+                </div>
+                <h1 class="login-title">Sweet Delights</h1>
+            </div>
+            
+            <div class="login-tabs">
+                <button class="login-tab active" data-role="customer">Customer</button>
+                <button class="login-tab" data-role="staff">Staff</button>
+                <button class="login-tab" data-role="admin">Admin</button>
+                <div class="tab-slider"></div>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="login-form" class="login-form active">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required autocomplete="off" placeholder="Enter your email">
+                    <!-- Suggestion Dropdown -->
+                    <div class="suggestion-dropdown" id="email-suggestions">
+                        <!-- Suggestions will be dynamically added here -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="login-password" required placeholder="Enter your password">
+                        <button type="button" class="toggle-password" id="toggle-login-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="login-error" class="login-error"></div>
+                <button type="submit" class="checkout-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login
+                </button>
+                
+                <!-- Create Account Button -->
+                <button type="button" class="create-account-btn" id="show-create-account">
+                    <i class="fas fa-user-plus"></i>
+                    Create Account
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Account Page (Hidden by default) -->
+    <div class="login-page" id="create-account-page" style="display: none;">
+        <div class="login-container" id="create-account-container">
+            <div class="login-logo">
+                <div class="login-logo-img">
+                    <img src="image/Cream & Black Aesthetic Cake & Dessert Logo.png" alt="Sweet Delights Cake Logo">
+                </div>
+                <h1 class="login-title">Create Account</h1>
+            </div>
+            
+            <!-- Create Account Form -->
+            <form id="create-account-form">
+                <div class="form-group">
+                    <label for="create-name">Full Name</label>
+                    <input type="text" id="create-name" required autocomplete="off" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label for="create-email">Email</label>
+                    <input type="email" id="create-email" required autocomplete="off" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="create-password">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="create-password" required placeholder="Create a password">
+                        <button type="button" class="toggle-password" id="toggle-create-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-requirements">
+                        <p>Password must contain:</p>
+                        <ul>
+                            <li id="req-length" class="requirement-not-met">At least 8 characters</li>
+                            <li id="req-letter" class="requirement-not-met">At least one letter</li>
+                            <li id="req-number" class="requirement-not-met">At least one number</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <div class="password-container">
+                        <input type="password" id="confirm-password" required placeholder="Confirm your password">
+                        <button type="button" class="toggle-password" id="toggle-confirm-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="create-account-error" class="login-error"></div>
+                <button type="submit" class="checkout-btn" id="create-account-submit">
+                    <i class="fas fa-user-plus"></i>
+                    Create Account
+                </button>
+                
+                <div class="form-switch">
+                    Already have an account? <a id="show-login">Login here</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard (Hidden by default) -->
+    <div class="dashboard" id="dashboard">
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <div class="logo-img">
+                            <img src="image/Cream & Black Aesthetic Cake & Dessert Logo.png" alt="Sweet Delights Cake Logo">
+                        </div>
+                        <span>Sweet Delights</span>
+                    </div>
+                    <button class="mobile-menu-btn" id="mobile-menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="user-info">
+                        <div class="user-details">
+                            <span id="current-user">Customer User</span>
+                            <span class="user-type" id="user-role">Customer</span>
+                        </div>
+                        <button class="btn" id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <nav>
+            <div class="container nav-container">
+                <div class="nav-section" id="customer-nav">
+                    <button class="nav-btn active" data-section="browse-menu">
+                        <i class="fas fa-utensils"></i>
+                        Browse Menu
+                    </button>
+                    <button class="nav-btn" data-section="cart">
+                        <i class="fas fa-shopping-cart"></i>
+                        Cart
+                        <span id="cart-count" class="badge">0</span>
+                    </button>
+                    <button class="nav-btn" data-section="track-order">
+                        <i class="fas fa-truck"></i>
+                        Track Order
+                    </button>
+                    <button class="nav-btn" data-section="order-history">
+                        <i class="fas fa-history"></i>
+                        Order History
+                    </button>
+                    <button class="nav-btn" data-section="cancel-history">
+                        <i class="fas fa-times-circle"></i>
+                        Cancel History
+                    </button>
+                    <button class="nav-btn" data-section="about-us">
+                        <i class="fas fa-info-circle"></i>
+                        About Us
+                    </button>
+                </div>
+                <div class="nav-section" id="staff-nav">
+                    <button class="nav-btn" data-section="view-orders">
+                        <i class="fas fa-clipboard-list"></i>
+                        View Orders
+                    </button>
+                </div>
+                <div class="nav-section" id="admin-nav">
+                    <button class="nav-btn" data-section="manage-users">
+                        <i class="fas fa-users-cog"></i>
+                        Manage Users
+                    </button>
+                    <button class="nav-btn" data-section="manage-items">
+                        <i class="fas fa-boxes"></i>
+                        Manage Items
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="content">
+                <div class="main-content">
+                    <!-- Browse Menu Section -->
+                    <div id="browse-menu" class="section active">
+                        <h2 class="section-title"><i class="fas fa-utensils"></i> Our Cake Menu</h2>
+                        <div class="menu-grid" id="menu-items">
+                            <!-- Menu items will be dynamically added here -->
+                        </div>
+                    </div>
+
+                    <!-- Cart Section -->
+                    <div id="cart" class="section">
+                        <h2 class="section-title"><i class="fas fa-shopping-cart"></i> Your Cart</h2>
+                        <div class="cart-cards" id="cart-cards">
+                            <!-- Cart cards will be dynamically added here -->
+                        </div>
+                        <div class="cart-summary">
+                            <div class="cart-total" id="cart-total">Total: ₱0.00</div>
+                            <button class="checkout-btn" id="proceed-to-payment">
+                                <i class="fas fa-credit-card"></i>
+                                Proceed to Payment
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Payment Section -->
+                    <div id="payment" class="section">
+                        <h2 class="section-title"><i class="fas fa-credit-card"></i> Payment</h2>
+                        <div class="payment-container">
+                            <div class="payment-methods-container">
+                                <h3 style="margin-bottom: 20px; color: var(--dark);">Select Payment Method</h3>
+                                <div class="payment-methods">
+                                    <div class="payment-method gcash-payment" data-method="gcash">
+                                        <div class="gcash-logo">
+                                            <img src="image/gcash logo.jpg" alt="GCash Logo">
+                                        </div>
+                                        <div>GCash</div>
+                                    </div>
+                                    <div class="payment-method" data-method="cod">
+                                        <div class="payment-icon">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                        </div>
+                                        <div>Cash on Delivery</div>
+                                    </div>
+                                </div>
+
+                                <!-- Contact Information for both payment methods -->
+                                <div class="contact-info-payment">
+                                    <div class="form-group">
+                                        <label for="customer-name">Full Name</label>
+                                        <input type="text" id="customer-name" placeholder="Enter your full name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="customer-contact">Contact Number</label>
+                                        <input type="text" id="customer-contact" placeholder="09XX XXX XXXX" maxlength="11" required>
+                                    </div>
+                                </div>
+
+                                <!-- Single Line Location Input -->
+                                <div class="form-group">
+                                    <label for="delivery-location">Delivery Address</label>
+                                    <input type="text" id="delivery-location" class="single-line-location" 
+                                           placeholder="House/Building No., Street, Barangay, City, Province, ZIP Code" required>
+                                </div>
+
+                                <!-- GCash Payment Form -->
+                                <div id="gcash-payment-form" style="display: none;">
+                                    <h3 style="margin-bottom: 20px; color: var(--dark);">GCash Payment</h3>
+                                    <div class="gcash-instructions">
+                                        <h4><i class="fas fa-info-circle"></i> How to Pay with GCash:</h4>
+                                        <ol>
+                                            <li>Open your GCash app</li>
+                                            <li>Go to "Send Money"</li>
+                                            <li>Enter our GCash number: <strong>0917 123 4567</strong></li>
+                                            <li>Enter the amount: <strong id="gcash-amount">₱0.00</strong></li>
+                                            <li>Add your order ID in the message: <strong id="gcash-order-id">#1001</strong></li>
+                                            <li>Confirm the payment</li>
+                                        </ol>
+                                        <p><strong>Note:</strong> Your order will be processed once payment is confirmed.</p>
+                                    </div>
+                                </div>
+
+                                <!-- COD Payment Form -->
+                                <div id="cod-info" style="display: none;">
+                                    <h3 style="margin-bottom: 20px; color: var(--dark);">Cash on Delivery</h3>
+                                    <p>Pay with cash when your order is delivered to your address.</p>
+                                </div>
+                            </div>
+                            <div class="payment-form-container">
+                                <h3 style="margin-bottom: 20px; color: var(--dark);">Order Summary</h3>
+                                <div id="payment-summary">
+                                    <!-- Order summary will be dynamically added here -->
+                                </div>
+                                <div class="cart-total" id="payment-total">Total: ₱0.00</div>
+                                <button class="checkout-btn" id="confirm-gcash-payment" style="display: none;">
+                                    <i class="fas fa-check"></i>
+                                    Confirm GCash Payment
+                                </button>
+                                <button class="checkout-btn" id="complete-cod-payment" style="display: none;">
+                                    <i class="fas fa-check"></i>
+                                    Place COD Order
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Track Order Section -->
+                    <div id="track-order" class="section">
+                        <h2 class="section-title"><i class="fas fa-truck"></i> Track Your Orders</h2>
+                        <div class="tracking-container" id="order-tracking-container">
+                            <!-- Order tracking cards will be dynamically added here -->
+                        </div>
+                        <div class="tracking-summary">
+                            <h3 style="margin-bottom: 20px; color: var(--dark);">Tracking Summary</h3>
+                            <div id="tracking-summary">
+                                <!-- Tracking summary will be dynamically added here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order History Section -->
+                    <div id="order-history" class="section">
+                        <h2 class="section-title"><i class="fas fa-history"></i> Order History</h2>
+                        <div class="order-history-cards" id="order-history-cards">
+                            <!-- Order history cards will be dynamically added here -->
+                        </div>
+                        <!-- Empty state message -->
+                        <div id="order-history-empty" class="order-history-empty">
+                            <p>You have no order history yet.</p>
+                        </div>
+                    </div>
+
+                    <!-- Cancel History Section -->
+                    <div id="cancel-history" class="section">
+                        <h2 class="section-title"><i class="fas fa-times-circle"></i> Cancel History</h2>
+                        <div class="cancel-history-container">
+                            <div class="cancel-history-cards" id="cancel-history-cards">
+                                <!-- Cancel history cards will be dynamically added here -->
+                            </div>
+                            <!-- Empty state message -->
+                            <div id="cancel-history-empty" class="cancel-history-empty">
+                                <p>You have no cancelled orders yet.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- About Us Section -->
+                    <div id="about-us" class="section">
+                        <h2 class="section-title"><i class="fas fa-info-circle"></i> About Sweet Delights</h2>
+                        
+                        <!-- README Section -->
+                        <div class="readme-section">
+                            <h3><i class="fas fa-book" style="color: var(--primary);"></i> README </h3>
+                            <div class="readme-content">
+                                <h4>About Sweet Delights Cake Ordering System</h4>
+                                <p>This is a comprehensive cake ordering system designed to provide a seamless experience for customers, staff, and administrators. The system allows customers to browse cakes, place orders, track their delivery, and view order history.</p>
+                                
+                                <h4>System Features</h4>
+                                <ul>
+                                    <li><strong>Customer Features:</strong> Browse menu, add items to cart, place orders, track orders, view order history, view cancel history</li>
+                                    <li><strong>Staff Features:</strong> View and update order statuses</li>
+                                    <li><strong>Admin Features:</strong> Manage users, manage menu items</li>
+                                </ul>
+                                
+                                <h4>How to Use</h4>
+                                <p><strong>For Customers:</strong></p>
+                                <ol>
+                                    <li>Login with customer credentials</li>
+                                    <li>Browse the cake menu and add items to your cart</li>
+                                    <li>Proceed to checkout and select payment method (GCash or Cash on Delivery)</li>
+                                    <li>Track your order status in real-time</li>
+                                    <li>View your order history for past purchases</li>
+                                    <li>View your cancel history for cancelled orders</li>
+                                </ol>
+                                
+                                <p><strong>For Staff:</strong></p>
+                                <ol>
+                                    <li>Login with staff credentials</li>
+                                    <li>View all orders in the system</li>
+                                    <li>Update order status as they progress through preparation and delivery</li>
+                                </ol>
+                                
+                                <p><strong>For Admin:</strong></p>
+                                <ol>
+                                    <li>Login with admin credentials</li>
+                                    <li>Manage all users in the system</li>
+                                    <li>Manage menu items (add, edit, delete)</li>
+                                    
+                                </ol>
+                                
+                                <h4>Payment Methods</h4>
+                                <p>The system supports two payment methods:</p>
+                                <ul>
+                                    <li><strong>GCash:</strong> Digital payment through the GCash app</li>
+                                    <li><strong>Cash on Delivery:</strong> Pay with cash when your order is delivered</li>
+                                </ul>
+                                
+                                <h4>Order Statuses</h4>
+                                <p>Orders progress through the following statuses:</p>
+                                <ul>
+                                    <li><strong>Pending:</strong> Order received, awaiting processing</li>
+                                    <li><strong>Preparing:</strong> Order is being prepared</li>
+                                    <li><strong>Ready:</strong> Order is ready for delivery</li>
+                                    <li><strong>Delivered:</strong> Order has been successfully delivered</li>
+                                    <li><strong>Cancelled:</strong> Order has been cancelled</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="mission-vision">
+                            <div class="mission-card">
+                                <h3><i class="fas fa-bullseye" style="color: var(--primary);"></i> Our Mission</h3>
+                                <p>To create exceptional cake and dessert experiences by crafting each product with passion, quality ingredients, and heartfelt dedication. We strive to make every celebration sweeter through our made-with-love approach to baking and customer service.</p>
+                            </div>
+                            
+                            <div class="vision-card">
+                                <h3><i class="fas fa-eye" style="color: var(--secondary);"></i> Our Vision</h3>
+                                <p>To become the most beloved cake and dessert destination in our community, recognized for our commitment to quality, creativity, and the genuine care we put into every product we create. We envision spreading joy and creating lasting memories through our delicious creations.</p>
+                            </div>
+                        </div>
+                        
+                        <div style="background-color: white; border-radius: 12px; padding: 20px; box-shadow: var(--shadow);">
+                            <h3 style="margin-bottom: 20px; color: var(--dark); display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-heart" style="color: var(--primary);"></i> Our Story
+                            </h3>
+                            <p style="line-height: 1.7; color: var(--gray); margin-bottom: 20px;">
+                                Sweet Delights was founded with a simple yet powerful idea: to bring joy to people's lives through beautifully crafted, delicious cakes and desserts. Our journey began in a small home kitchen, where every cake was baked with love and attention to detail.
+                            </p>
+                            <p style="line-height: 1.7; color: var(--gray);">
+                                Today, we continue to honor that tradition, using only the finest ingredients and maintaining our commitment to quality and customer satisfaction. Every cake we create carries our signature "MADE WITH LOVE" promise, ensuring that your special moments become even more memorable.
+                            </p>
+                        </div>
+                        
+                        <!-- Contact Information -->
+                        <div class="contact-info">
+                            <h3><i class="fas fa-address-book" style="color: var(--primary);"></i> Contact Us</h3>
+                            <div class="contact-details">
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Address</h4>
+                                        <p>123 Sweet Street, Dessert City</p>
+                                    </div>
+                                </div>
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Phone</h4>
+                                        <p>09626184836</p>
+                                    </div>
+                                </div>
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Email</h4>
+                                        <p>datinguinoo@gmail.com</p>
+                                    </div>
+                                </div>
+                                <div class="contact-item">
+                                    <div class="contact-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div>
+                                        <h4>Business Hours</h4>
+                                        <p>Mon-Sat: 8AM - 8PM</p>
+                                        <p>Sunday: 9AM - 6PM</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- View Orders Section (Staff & Admin) -->
+                    <div id="view-orders" class="section">
+                        <h2 class="section-title"><i class="fas fa-clipboard-list"></i> All Orders</h2>
+                        <table class="action-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Items</th>
+                                    <th>Total</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-table-body">
+                                <!-- Orders will be dynamically added here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Manage Users Section (Admin) -->
+                    <div id="manage-users" class="section">
+                        <h2 class="section-title"><i class="fas fa-users-cog"></i> Manage Users</h2>
+                        <div class="users-table-container">
+                            <table class="users-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-table-body">
+                                    <!-- Users will be dynamically added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="users-summary">
+                            <h3 style="margin-bottom: 20px; color: var(--dark);">Users Summary</h3>
+                            <div id="users-summary">
+                                <!-- Users summary will be dynamically added here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Manage Items Section (Admin) -->
+                    <div id="manage-items" class="section">
+                        <h2 class="section-title"><i class="fas fa-boxes"></i> Manage Items</h2>
+                        <button class="add-item-btn" id="add-item-btn">
+                            <i class="fas fa-plus"></i>
+                            Add New Item
+                        </button>
+                        <div class="manage-items-container">
+                            <table class="items-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Price</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="items-table-body">
+                                    <!-- Items will be dynamically added here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="items-summary">
+                            <h3 style="margin-bottom: 20px; color: var(--dark);">Items Summary</h3>
+                            <div id="items-summary">
+                                <!-- Items summary will be dynamically added here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-bottom">
+                    <p>&copy; 2023 Sweet Delights. All rights reserved. | Made with <i class="fas fa-heart" style="color: var(--primary);"></i></p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Cancel Order Confirmation Modal -->
+    <div class="modal cancel-confirmation-modal" id="cancel-order-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Cancel Order</h3>
+                <button class="close-modal" id="close-cancel-modal">&times;</button>
+            </div>
+            <div class="cancel-confirmation">
+                <p>Are you sure you want to cancel this order? This action cannot be undone.</p>
+                <div class="cancel-reason">
+                    <label for="cancel-reason">Reason for cancellation (optional):</label>
+                    <textarea id="cancel-reason" placeholder="Please provide a reason for cancellation..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn modal-btn-secondary" id="cancel-cancel-order">No, Keep Order</button>
+                    <button type="button" class="modal-btn modal-btn-danger" id="confirm-cancel-order">Yes, Cancel Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Form Modal -->
+    <div class="modal item-form-modal" id="item-form-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="item-form-title">Add New Item</h3>
+                <button class="close-modal" id="close-item-form-modal">&times;</button>
+            </div>
+            <form id="item-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="item-name">Item Name</label>
+                        <input type="text" id="item-name" required placeholder="Enter item name">
+                    </div>
+                    <div class="form-group">
+                        <label for="item-price">Price (₱)</label>
+                        <input type="number" id="item-price" required placeholder="Enter price" min="0" step="0.01">
+                    </div>
+                </div>
+                <div class="form-group full-width">
+                    <label for="item-description">Description</label>
+                    <textarea id="item-description" required placeholder="Enter item description" rows="3"></textarea>
+                </div>
+                <div class="form-group full-width">
+                    <label for="item-image">Image URL</label>
+                    <input type="text" id="item-image" placeholder="Enter image URL">
+                    <div class="image-preview" id="image-preview">
+                        <div class="image-preview-placeholder">
+                            <i class="fas fa-image"></i>
+                            <p>Image preview</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn modal-btn-secondary" id="cancel-item-form">Cancel</button>
+                    <button type="submit" class="modal-btn modal-btn-primary" id="save-item">Save Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Item Confirmation Modal -->
+    <div class="modal" id="delete-item-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Delete Item</h3>
+                <button class="close-modal" id="close-delete-item-modal">&times;</button>
+            </div>
+            <div class="delete-confirmation">
+                <p>Are you sure you want to delete this item? This action cannot be undone.</p>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn modal-btn-secondary" id="cancel-delete-item">Cancel</button>
+                    <button type="button" class="modal-btn modal-btn-danger" id="confirm-delete-item">Delete Item</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW: User Form Modal -->
+    <div class="modal user-form-modal" id="user-form-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="user-form-title">Edit User</h3>
+                <button class="close-modal" id="close-user-form-modal">&times;</button>
+            </div>
+            <form id="user-form">
+                <div class="user-form-row">
+                    <div class="form-group">
+                        <label for="user-name">Full Name</label>
+                        <input type="text" id="user-name" required placeholder="Enter full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="user-username">Username</label>
+                        <input type="text" id="user-username" required placeholder="Enter username">
+                    </div>
+                </div>
+                <div class="user-form-row">
+                    <div class="form-group">
+                        <label for="user-email">Email</label>
+                        <input type="email" id="user-email" required placeholder="Enter email">
+                    </div>
+                    <div class="form-group">
+                        <label for="user-role">Role</label>
+                        <select id="user-role" required>
+                            <option value="customer">Customer</option>
+                            <option value="staff">Staff</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group full-width">
+                    <label for="user-password">Password (leave blank to keep current)</label>
+                    <div class="password-container">
+                        <input type="password" id="user-password" placeholder="Enter new password">
+                        <button type="button" class="toggle-password" id="toggle-user-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn modal-btn-secondary" id="cancel-user-form">Cancel</button>
+                    <button type="submit" class="modal-btn modal-btn-primary" id="save-user">Save User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- NEW: Delete User Confirmation Modal -->
+    <div class="modal delete-user-modal" id="delete-user-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Delete User</h3>
+                <button class="close-modal" id="close-delete-user-modal">&times;</button>
+            </div>
+            <div class="delete-confirmation">
+                <p>Are you sure you want to delete this user? This action cannot be undone.</p>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn modal-btn-secondary" id="cancel-delete-user">Cancel</button>
+                    <button type="button" class="modal-btn modal-btn-danger" id="confirm-delete-user">Delete User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data with image references
+        let menuItems = [
+            { 
+                id: 1, 
+                name: "Chocolate Fudge Cake", 
+                description: "Rich chocolate cake with fudge frosting", 
+                price: 1299.99, 
+                image: "image/choco.jpg"
+            },
+            { 
+                id: 2, 
+                name: "Vanilla Bean Cake", 
+                description: "Classic vanilla cake with buttercream", 
+                price: 1149.99, 
+                image: "image/vanila.jpg" 
+            },
+            { 
+                id: 3, 
+                name: "Red Velvet Cake", 
+                description: "Moist red velvet with cream cheese frosting", 
+                price: 1449.99, 
+                image: "image/red velvet.jpg" 
+            },
+            { 
+                id: 4, 
+                name: "Carrot Cake", 
+                description: "Spiced carrot cake with cream cheese frosting", 
+                price: 1249.99, 
+                image: "image/Carrot-Cake-14-Edit.jpg" 
+            },
+            { 
+                id: 5, 
+                name: "Lemon Drizzle Cake", 
+                description: "Zesty lemon cake with lemon glaze", 
+                price: 1099.99, 
+                image: "image/lemon-drizzle-cake-recipe-serving.webp" 
+            },
+            { 
+                id: 6, 
+                name: "Strawberry Shortcake", 
+                description: "Light sponge with fresh strawberries", 
+                price: 1349.99, 
+                image: "image/Strawberry-shortcake-cake-1-of-1.jpg" 
+            }
+        ];
+
+        let cart = [];
+        let orders = [];
+        let orderHistory = [];
+        let cancelHistory = [];
+        let users = [
+            { id: 1, name: "Customer User", role: "customer", username: "customer", password: "Cust-123", email: "customer@gmail.com" },
+            { id: 2, name: "Staff User", role: "staff", username: "staff", password: "Staff-123", email: "staff@gmail.com" },
+            { id: 3, name: "Admin User", role: "admin", username: "admin", password: "Admin-123", email: "admin@gmail.com" }
+        ];
+
+        let currentUser = null;
+        let currentOrderId = 1001;
+        let nextUserId = 4;
+        let selectedLoginRole = 'customer';
+        let userLocation = null;
+        let orderToCancel = null;
+
+        // Variables for item management
+        let nextItemId = 7; // Starting after the initial 6 items
+        let editingItemId = null;
+        let deletingItemId = null;
+
+        // NEW: Variables for user management
+        let editingUserId = null;
+        let deletingUserId = null;
+
+        // DOM Elements
+        const loginPage = document.getElementById('login-page');
+        const createAccountPage = document.getElementById('create-account-page');
+        const loginContainer = document.getElementById('login-container');
+        const createAccountContainer = document.getElementById('create-account-container');
+        const dashboard = document.getElementById('dashboard');
+        const loginForm = document.getElementById('login-form');
+        const createAccountForm = document.getElementById('create-account-form');
+        const loginEmail = document.getElementById('login-email');
+        const loginPassword = document.getElementById('login-password');
+        const loginError = document.getElementById('login-error');
+        const createAccountError = document.getElementById('create-account-error');
+        const loginTabs = document.querySelectorAll('.login-tab');
+        const tabSlider = document.querySelector('.tab-slider');
+        const toggleLoginPassword = document.getElementById('toggle-login-password');
+        const toggleCreatePassword = document.getElementById('toggle-create-password');
+        const toggleConfirmPassword = document.getElementById('toggle-confirm-password');
+        const logoutBtn = document.getElementById('logout-btn');
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileNav = document.getElementById('mobile-nav');
+        const customerMobileNav = document.getElementById('customer-mobile-nav');
+        const staffMobileNav = document.getElementById('staff-mobile-nav');
+        const adminMobileNav = document.getElementById('admin-mobile-nav');
+        const mobileNavButtons = document.querySelectorAll('.mobile-nav-btn');
+
+        // Create Account Elements
+        const showCreateAccountBtn = document.getElementById('show-create-account');
+        const showLoginBtn = document.getElementById('show-login');
+        const createAccountSubmit = document.getElementById('create-account-submit');
+        const createName = document.getElementById('create-name');
+        const createEmail = document.getElementById('create-email');
+        const createPassword = document.getElementById('create-password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+
+        // Password requirement elements
+        const reqLength = document.getElementById('req-length');
+        const reqLetter = document.getElementById('req-letter');
+        const reqNumber = document.getElementById('req-number');
+
+        // Suggestion Dropdown Element
+        const emailSuggestions = document.getElementById('email-suggestions');
+
+        const currentUserElement = document.getElementById('current-user');
+        const userRoleElement = document.getElementById('user-role');
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const sections = document.querySelectorAll('.section');
+        const menuItemsContainer = document.getElementById('menu-items');
+        const cartCardsContainer = document.getElementById('cart-cards');
+        const cartTotalElement = document.getElementById('cart-total');
+        const cartCountElement = document.getElementById('cart-count');
+        const proceedToPaymentButton = document.getElementById('proceed-to-payment');
+        const paymentMethods = document.querySelectorAll('.payment-method');
+        const gcashPaymentForm = document.getElementById('gcash-payment-form');
+        const codInfo = document.getElementById('cod-info');
+        const ordersTableBody = document.getElementById('orders-table-body');
+        const orderTrackingContainer = document.getElementById('order-tracking-container');
+        const gcashAmountElement = document.getElementById('gcash-amount');
+        const gcashOrderIdElement = document.getElementById('gcash-order-id');
+        const confirmGcashPaymentButton = document.getElementById('confirm-gcash-payment');
+        const completeCodPaymentButton = document.getElementById('complete-cod-payment');
+        const paymentSummaryElement = document.getElementById('payment-summary');
+        const paymentTotalElement = document.getElementById('payment-total');
+        const trackingSummaryElement = document.getElementById('tracking-summary');
+        
+        // Order History Elements
+        const orderHistoryCardsContainer = document.getElementById('order-history-cards');
+        const orderHistoryEmpty = document.getElementById('order-history-empty');
+        
+        // Cancel History Elements
+        const cancelHistoryCardsContainer = document.getElementById('cancel-history-cards');
+        const cancelHistoryEmpty = document.getElementById('cancel-history-empty');
+        
+        // New form elements
+        const customerNameInput = document.getElementById('customer-name');
+        const customerContactInput = document.getElementById('customer-contact');
+        const deliveryLocationInput = document.getElementById('delivery-location');
+        
+        // Cancel Order Modal Elements
+        const cancelOrderModal = document.getElementById('cancel-order-modal');
+        const closeCancelModal = document.getElementById('close-cancel-modal');
+        const cancelCancelOrder = document.getElementById('cancel-cancel-order');
+        const confirmCancelOrder = document.getElementById('confirm-cancel-order');
+        const cancelReason = document.getElementById('cancel-reason');
+
+        // Admin Elements
+        const usersTableBody = document.getElementById('users-table-body');
+        const usersSummaryElement = document.getElementById('users-summary');
+        
+        // Manage Items Elements
+        const itemsTableBody = document.getElementById('items-table-body');
+        const itemsSummaryElement = document.getElementById('items-summary');
+        const addItemBtn = document.getElementById('add-item-btn');
+        const itemFormModal = document.getElementById('item-form-modal');
+        const closeItemFormModal = document.getElementById('close-item-form-modal');
+        const cancelItemForm = document.getElementById('cancel-item-form');
+        const itemForm = document.getElementById('item-form');
+        const itemFormTitle = document.getElementById('item-form-title');
+        const itemNameInput = document.getElementById('item-name');
+        const itemPriceInput = document.getElementById('item-price');
+        const itemDescriptionInput = document.getElementById('item-description');
+        const itemImageInput = document.getElementById('item-image');
+        const imagePreview = document.getElementById('image-preview');
+        const saveItemBtn = document.getElementById('save-item');
+        const deleteItemModal = document.getElementById('delete-item-modal');
+        const closeDeleteItemModal = document.getElementById('close-delete-item-modal');
+        const cancelDeleteItem = document.getElementById('cancel-delete-item');
+        const confirmDeleteItem = document.getElementById('confirm-delete-item');
+
+        // NEW: User Management Modal Elements
+        const userFormModal = document.getElementById('user-form-modal');
+        const closeUserFormModal = document.getElementById('close-user-form-modal');
+        const cancelUserForm = document.getElementById('cancel-user-form');
+        const userForm = document.getElementById('user-form');
+        const userFormTitle = document.getElementById('user-form-title');
+        const userNameInput = document.getElementById('user-name');
+        const userUsernameInput = document.getElementById('user-username');
+        const userEmailInput = document.getElementById('user-email');
+        const userRoleSelect = document.getElementById('user-role');
+        const userPasswordInput = document.getElementById('user-password');
+        const toggleUserPassword = document.getElementById('toggle-user-password');
+        const saveUserBtn = document.getElementById('save-user');
+        const deleteUserModal = document.getElementById('delete-user-modal');
+        const closeDeleteUserModal = document.getElementById('close-delete-user-modal');
+        const cancelDeleteUser = document.getElementById('cancel-delete-user');
+        const confirmDeleteUser = document.getElementById('confirm-delete-user');
+
+        // Initialize the application
+        function init() {
+            setupEventListeners();
+            renderMenuItems();
+            updateCartCount();
+            
+            // Set initial order ID for GCash
+            gcashOrderIdElement.textContent = `#${currentOrderId}`;
+            
+            // Move any existing delivered orders to history
+            moveDeliveredOrdersToHistory();
+        }
+
+        // Update suggestion dropdown based on selected role
+        function updateEmailSuggestions() {
+            emailSuggestions.innerHTML = '';
+            
+            // Filter users by selected role
+            const roleUsers = users.filter(user => user.role === selectedLoginRole);
+            
+            if (roleUsers.length === 0) {
+                emailSuggestions.style.display = 'none';
+                return;
+            }
+            
+            roleUsers.forEach(user => {
+                const suggestionItem = document.createElement('div');
+                suggestionItem.className = 'suggestion-item';
+                suggestionItem.innerHTML = `
+                    <span class="suggestion-email">${user.email}</span>
+                    <span class="suggestion-role">${user.role}</span>
+                `;
+                
+                suggestionItem.addEventListener('click', () => {
+                    loginEmail.value = user.email;
+                    emailSuggestions.style.display = 'none';
+                });
+                
+                emailSuggestions.appendChild(suggestionItem);
+            });
+            
+            emailSuggestions.style.display = 'block';
+        }
+
+        // Render menu items
+        function renderMenuItems() {
+            menuItemsContainer.innerHTML = '';
+            
+            menuItems.forEach(item => {
+                const menuItem = document.createElement('div');
+                menuItem.className = 'menu-item';
+                menuItem.innerHTML = `
+                    <div class="menu-item-img">
+                        <img src="${item.image}" alt="${item.name}">
+                    </div>
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-title">${item.name}</h3>
+                        <p class="menu-item-desc">${item.description}</p>
+                        <div class="menu-item-footer">
+                            <div class="price">₱${item.price.toFixed(2)}</div>
+                            <button class="add-to-cart" data-id="${item.id}">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                menuItemsContainer.appendChild(menuItem);
+            });
+        }
+
+        // Update UI based on current user
+        function updateUserInterface() {
+            currentUserElement.textContent = currentUser.name;
+            userRoleElement.textContent = currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+            
+            // Show/hide navigation based on user role
+            document.getElementById('customer-nav').style.display = currentUser.role === 'customer' ? 'flex' : 'none';
+            document.getElementById('staff-nav').style.display = currentUser.role === 'staff' ? 'flex' : 'none';
+            document.getElementById('admin-nav').style.display = currentUser.role === 'admin' ? 'flex' : 'none';
+            
+            // Reset to default section based on user role
+            if (currentUser.role === 'customer') {
+                showSection('browse-menu');
+            } else if (currentUser.role === 'staff') {
+                showSection('view-orders');
+                renderOrdersTable();
+            } else if (currentUser.role === 'admin') {
+                showSection('manage-users');
+                renderUsersTable();
+                renderUsersSummary();
+            }
+        }
+
+        // Update login tabs
+        function updateLoginTabs() {
+            loginTabs.forEach(tab => {
+                if (tab.getAttribute('data-role') === selectedLoginRole) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+        }
+
+        // Show a specific section
+        function showSection(sectionId) {
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            
+            navButtons.forEach(button => {
+                button.classList.remove('active');
+                if (button.getAttribute('data-section') === sectionId) {
+                    button.classList.add('active');
+                }
+            });
+            
+            // Load appropriate content for the section
+            if (sectionId === 'cart') {
+                renderCart();
+            } else if (sectionId === 'payment') {
+                renderPaymentSummary();
+            } else if (sectionId === 'view-orders') {
+                renderOrdersTable();
+            } else if (sectionId === 'track-order') {
+                renderOrderTracking();
+                renderTrackingSummary();
+            } else if (sectionId === 'order-history') {
+                moveDeliveredOrdersToHistory();
+                renderOrderHistory();
+            } else if (sectionId === 'cancel-history') {
+                renderCancelHistory();
+            } else if (sectionId === 'manage-users') {
+                renderUsersTable();
+                renderUsersSummary();
+            } else if (sectionId === 'manage-items') {
+                renderItemsTable();
+                renderItemsSummary();
+            }
+        }
+
+        // Render cart as vertical cards
+        function renderCart() {
+            cartCardsContainer.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartCardsContainer.innerHTML = '<div class="cart-empty">Your cart is empty</div>';
+                cartTotalElement.textContent = 'Total: ₱0.00';
+                return;
+            }
+            
+            let total = 0;
+            cart.forEach(item => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+                
+                const cartCard = document.createElement('div');
+                cartCard.className = 'cart-card';
+                cartCard.innerHTML = `
+                    <div class="cart-item-img">
+                        <img src="${menuItems.find(menuItem => menuItem.id === item.id).image}" alt="${item.name}">
+                    </div>
+                    <div class="cart-item-details">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">₱${item.price.toFixed(2)}</div>
+                        <div class="cart-item-controls">
+                            <button class="quantity-btn decrease-quantity" data-id="${item.id}">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span>${item.quantity}</span>
+                            <button class="quantity-btn increase-quantity" data-id="${item.id}">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="remove-btn" data-id="${item.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="cart-item-subtotal">₱${subtotal.toFixed(2)}</div>
+                `;
+                cartCardsContainer.appendChild(cartCard);
+            });
+            
+            cartTotalElement.textContent = `Total: ₱${total.toFixed(2)}`;
+            gcashAmountElement.textContent = `₱${total.toFixed(2)}`;
+        }
+
+        // Render payment summary
+        function renderPaymentSummary() {
+            paymentSummaryElement.innerHTML = '';
+            
+            if (cart.length === 0) {
+                paymentSummaryElement.innerHTML = '<p>Your cart is empty</p>';
+                paymentTotalElement.textContent = 'Total: ₱0.00';
+                return;
+            }
+            
+            let total = 0;
+            cart.forEach(item => {
+                const paymentItemElement = document.createElement('div');
+                paymentItemElement.className = 'cart-item';
+                paymentItemElement.innerHTML = `
+                    <div class="cart-item-info">
+                        <h4>${item.name}</h4>
+                        <div class="cart-item-price">₱${item.price.toFixed(2)}</div>
+                    </div>
+                    <div class="cart-item-controls">
+                        <span>Qty: ${item.quantity}</span>
+                    </div>
+                `;
+                paymentSummaryElement.appendChild(paymentItemElement);
+                total += item.price * item.quantity;
+            });
+            
+            paymentTotalElement.textContent = `Total: ₱${total.toFixed(2)}`;
+        }
+
+        // Update cart count in navigation
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCountElement.textContent = count;
+        }
+
+        // Render orders table for staff and admin
+        function renderOrdersTable() {
+            ordersTableBody.innerHTML = '';
+            
+            if (orders.length === 0) {
+                ordersTableBody.innerHTML = '<tr><td colspan="7">No orders found</td></tr>';
+                return;
+            }
+            
+            orders.forEach(order => {
+                const orderRow = document.createElement('tr');
+                orderRow.innerHTML = `
+                    <td>#${order.id}</td>
+                    <td>${order.customerName || order.customer}</td>
+                    <td>${order.items.map(item => `${item.name} (${item.quantity})`).join(', ')}</td>
+                    <td>₱${order.total.toFixed(2)}</td>
+                    <td>${order.paymentMethod}</td>
+                    <td><span class="status-badge status-${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span></td>
+                    <td>
+                        <select class="status-select update-status" data-id="${order.id}">
+                            <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
+                            <option value="preparing" ${order.status === 'preparing' ? 'selected' : ''}>Preparing</option>
+                            <option value="ready" ${order.status === 'ready' ? 'selected' : ''}>Ready</option>
+                            <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                            <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                        </select>
+                    </td>
+                `;
+                ordersTableBody.appendChild(orderRow);
+            });
+        }
+
+        // Render users table for admin
+        function renderUsersTable() {
+            usersTableBody.innerHTML = '';
+            
+            if (users.length === 0) {
+                usersTableBody.innerHTML = '<tr><td colspan="6">No users found</td></tr>';
+                return;
+            }
+            
+            users.forEach(user => {
+                const userRow = document.createElement('tr');
+                userRow.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.username}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td><span class="user-role-badge role-${user.role}">${user.role.charAt(0).toUpperCase() + user.role.slice(1)}</span></td>
+                    <td>
+                        <div class="user-actions">
+                            <button class="action-btn edit-btn edit-user-btn" data-id="${user.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            ${user.id !== currentUser.id ? `
+                            <button class="action-btn delete-btn delete-user-btn" data-id="${user.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                `;
+                usersTableBody.appendChild(userRow);
+            });
+        }
+
+        // Render users summary for admin
+        function renderUsersSummary() {
+            const customerCount = users.filter(user => user.role === 'customer').length;
+            const staffCount = users.filter(user => user.role === 'staff').length;
+            const adminCount = users.filter(user => user.role === 'admin').length;
+            const totalUsers = users.length;
+            
+            usersSummaryElement.innerHTML = `
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: var(--dark); margin-bottom: 5px;">Total Users</h4>
+                    <p style="font-size: 24px; font-weight: bold; color: var(--primary);">${totalUsers}</p>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: var(--dark); margin-bottom: 5px;">Customers</h4>
+                    <p style="font-size: 18px; color: var(--secondary);">${customerCount}</p>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: var(--dark); margin-bottom: 5px;">Staff</h4>
+                    <p style="font-size: 18px; color: var(--accent);">${staffCount}</p>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: var(--dark); margin-bottom: 5px;">Admins</h4>
+                    <p style="font-size: 18px; color: var(--primary);">${adminCount}</p>
+                </div>
+            `;
+        }
+
+        // Render items table for admin
+        function renderItemsTable() {
+            itemsTableBody.innerHTML = '';
+            
+            if (menuItems.length === 0) {
+                itemsTableBody.innerHTML = '<tr><td colspan="6">No items found</td></tr>';
+                return;
+            }
+            
+            menuItems.forEach(item => {
+                const itemRow = document.createElement('tr');
+                itemRow.innerHTML = `
+                    <td>${item.id}</td>
+                    <td class="item-image-cell">
+                        <img src="${item.image}" alt="${item.name}" class="item-image">
+                    </td>
+                    <td>${item.name}</td>
+                    <td>${item.description}</td>
+                    <td>₱${item.price.toFixed(2)}</td>
+                    <td>
+                        <div class="item-actions">
+                            <button class="action-btn edit-btn" data-id="${item.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete-btn" data-id="${item.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                itemsTableBody.appendChild(itemRow);
+            });
+        }
+
+        // Render items summary for admin
+        function renderItemsSummary() {
+            const totalItems = menuItems.length;
+            const averagePrice = menuItems.reduce((sum, item) => sum + item.price, 0) / totalItems;
+            const highestPrice = Math.max(...menuItems.map(item => item.price));
+            const lowestPrice = Math.min(...menuItems.map(item => item.price));
+            
+            itemsSummaryElement.innerHTML = `
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: var(--dark); margin-bottom: 5px;">Total Items</h4>
+                    <p style="font-size: 24px; font-weight: bold; color: var(--primary);">${totalItems}</p>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: var(--dark); margin-bottom: 5px;">Average Price</h4>
+                    <p style="font-size: 18px; color: var(--secondary);">₱${averagePrice.toFixed(2)}</p>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: var(--dark); margin-bottom: 5px;">Highest Price</h4>
+                    <p style="font-size: 18px; color: var(--accent);">₱${highestPrice.toFixed(2)}</p>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: var(--dark); margin-bottom: 5px;">Lowest Price</h4>
+                    <p style="font-size: 18px; color: var(--success);">₱${lowestPrice.toFixed(2)}</p>
+                </div>
+            `;
+        }
+
+        // Render order tracking as cards
+        function renderOrderTracking() {
+            const trackingContainer = document.getElementById('order-tracking-container');
+            trackingContainer.innerHTML = '';
+            
+            // Filter orders to show only those belonging to the current customer
+            const customerOrders = orders.filter(order => order.customerId === currentUser.id);
+            
+            if (customerOrders.length === 0) {
+                trackingContainer.innerHTML = '<div class="order-card" style="text-align: center; padding: 40px;">You have no orders yet.</div>';
+                return;
+            }
+            
+            // Show all orders, with the most recent first
+            customerOrders.reverse().forEach(order => {
+                const orderCard = document.createElement('div');
+                orderCard.className = 'order-card';
+
+                // Calculate progress based on status
+                let progressWidth = '0%';
+                let completedSteps = 0;
+
+                if (order.status === 'pending') {
+                    progressWidth = '0%';
+                    completedSteps = 0;
+                } else if (order.status === 'preparing') {
+                    progressWidth = '33%';
+                    completedSteps = 1;
+                } else if (order.status === 'ready') {
+                    progressWidth = '66%';
+                    completedSteps = 2;
+                } else if (order.status === 'delivered') {
+                    progressWidth = '100%';
+                    completedSteps = 3;
+                } else if (order.status === 'cancelled') {
+                    progressWidth = '0%';
+                    completedSteps = 0;
+                }
+
+                // Set the CSS variable for the progress bar animation
+                orderCard.style.setProperty('--progress-width', progressWidth);
+
+                orderCard.innerHTML = `
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">Order #${order.id}</div>
+                            <div class="order-date">${order.date}</div>
+                            <div class="order-customer"><strong>Customer:</strong> ${order.customerName || order.customer}</div>
+                        </div>
+                        <div class="order-status status-${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</div>
+                    </div>
+                    <div class="order-details">
+                        <div class="order-detail-row">
+                            <div class="order-detail-label">Items:</div>
+                            <div class="order-detail-value">${order.items.map(item => `${item.name} (${item.quantity})`).join(', ')}</div>
+                        </div>
+                        <div class="order-detail-row">
+                            <div class="order-detail-label">Total:</div>
+                            <div class="order-detail-value">₱${order.total.toFixed(2)}</div>
+                        </div>
+                        <div class="order-detail-row">
+                            <div class="order-detail-label">Payment Method:</div>
+                            <div class="order-detail-value">${order.paymentMethod}</div>
+                        </div>
+                        <div class="order-detail-row">
+                            <div class="order-detail-label">Delivery Address:</div>
+                            <div class="order-detail-value">${order.location}</div>
+                        </div>
+                    </div>
+                    ${order.status !== 'cancelled' && order.status !== 'delivered' ? `
+                    <div class="tracking-progress">
+                        <div class="progress-steps">
+                            <div class="progress-bar" style="width: ${progressWidth};"></div>
+                            <div class="progress-step ${completedSteps >= 0 ? 'step-completed' : ''} ${order.status === 'pending' ? 'step-active' : ''}">
+                                <div class="step-icon">
+                                    <i class="fas ${completedSteps >= 0 ? 'fa-check' : 'fa-shopping-cart'}"></i>
+                                </div>
+                                <div class="step-label">Ordered</div>
+                            </div>
+                            <div class="progress-step ${completedSteps >= 1 ? 'step-completed' : ''} ${order.status === 'preparing' ? 'step-active' : ''}">
+                                <div class="step-icon">
+                                    <i class="fas ${completedSteps >= 1 ? 'fa-check' : 'fa-utensils'}"></i>
+                                </div>
+                                <div class="step-label">Preparing</div>
+                            </div>
+                            <div class="progress-step ${completedSteps >= 2 ? 'step-completed' : ''} ${order.status === 'ready' ? 'step-active' : ''}">
+                                <div class="step-icon">
+                                    <i class="fas ${completedSteps >= 2 ? 'fa-check' : 'fa-box'}"></i>
+                                </div>
+                                <div class="step-label">Ready</div>
+                            </div>
+                            <div class="progress-step ${completedSteps >= 3 ? 'step-completed' : ''} ${order.status === 'delivered' ? 'step-active' : ''}">
+                                <div class="step-icon">
+                                    <i class="fas ${completedSteps >= 3 ? 'fa-check' : 'fa-truck'}"></i>
+                                </div>
+                                <div class="step-label">Delivered</div>
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+                    ${order.status !== 'delivered' && order.status !== 'cancelled' ? `
+                    <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+                        <button class="cancel-order-btn" data-id="${order.id}">
+                            <i class="fas fa-times"></i>
+                            Cancel Order
+                        </button>
+                    </div>
+                    ` : ''}
+                `;
+                trackingContainer.appendChild(orderCard);
+            });
+        }
+
+        // Render tracking summary
+        function renderTrackingSummary() {
+            // Filter orders to show only those belonging to the current customer
+            const customerOrders = orders.filter(order => order.customerId === currentUser.id);
+            
+            if (customerOrders.length === 0) {
+                trackingSummaryElement.innerHTML = '<p>You have no orders yet.</p>';
+                return;
+            }
+            
+            const pendingOrders = customerOrders.filter(order => order.status === 'pending').length;
+            const preparingOrders = customerOrders.filter(order => order.status === 'preparing').length;
+            const readyOrders = customerOrders.filter(order => order.status === 'ready').length;
+            const deliveredOrders = customerOrders.filter(order => order.status === 'delivered').length;
+            const cancelledOrders = customerOrders.filter(order => order.status === 'cancelled').length;
+            
+            trackingSummaryElement.innerHTML = `
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: var(--dark); margin-bottom: 5px;">Total Orders</h4>
+                    <p style="font-size: 24px; font-weight: bold; color: var(--primary);">${customerOrders.length}</p>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: var(--dark); margin-bottom: 5px;">Pending</h4>
+                    <p style="font-size: 18px; color: var(--warning);">${pendingOrders}</p>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: var(--dark); margin-bottom: 5px;">Preparing</h4>
+                    <p style="font-size: 18px; color: var(--accent);">${preparingOrders}</p>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: var(--dark); margin-bottom: 5px;">Ready</h4>
+                    <p style="font-size: 18px; color: var(--secondary);">${readyOrders}</p>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: var(--dark); margin-bottom: 5px;">Delivered</h4>
+                    <p style="font-size: 18px; color: var(--success);">${deliveredOrders}</p>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <h4 style="color: var(--dark); margin-bottom: 5px;">Cancelled</h4>
+                    <p style="font-size: 18px; color: var(--danger);">${cancelledOrders}</p>
+                </div>
+            `;
+        }
+
+        // Render order history as vertical cards
+        function renderOrderHistory() {
+            const orderHistoryCardsContainer = document.getElementById('order-history-cards');
+            orderHistoryCardsContainer.innerHTML = '';
+            
+            // Filter order history to show only those belonging to the current customer
+            // EXCLUDE CANCELLED ORDERS FROM ORDER HISTORY
+            const customerOrderHistory = orderHistory.filter(order => 
+                order.customerId === currentUser.id && order.status !== 'cancelled'
+            );
+            
+            if (customerOrderHistory.length === 0) {
+                orderHistoryCardsContainer.style.display = 'none';
+                document.getElementById('order-history-empty').style.display = 'block';
+                return;
+            }
+            
+            orderHistoryCardsContainer.style.display = 'grid';
+            document.getElementById('order-history-empty').style.display = 'none';
+            
+            // Show orders in reverse chronological order (newest first)
+            customerOrderHistory.reverse().forEach(order => {
+                const historyCard = document.createElement('div');
+                historyCard.className = 'history-card';
+                historyCard.innerHTML = `
+                    <div class="history-card-header">
+                        <div>
+                            <div class="history-order-id">Order #${order.id}</div>
+                            <div class="history-order-date">${order.date}</div>
+                        </div>
+                        <div class="history-status status-${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</div>
+                    </div>
+                    <div class="history-details">
+                        <div class="history-detail-row">
+                            <div class="history-detail-label">Customer:</div>
+                            <div class="history-detail-value">${order.customerName}</div>
+                        </div>
+                        <div class="history-detail-row">
+                            <div class="history-detail-label">Contact:</div>
+                            <div class="history-detail-value">${order.customerContact}</div>
+                        </div>
+                        <div class="history-detail-row">
+                            <div class="history-detail-label">Items:</div>
+                            <div class="history-detail-value">${order.items.map(item => `${item.name} (${item.quantity})`).join(', ')}</div>
+                        </div>
+                        <div class="history-detail-row">
+                            <div class="history-detail-label">Total:</div>
+                            <div class="history-detail-value">₱${order.total.toFixed(2)}</div>
+                        </div>
+                        <div class="history-detail-row">
+                            <div class="history-detail-label">Payment Method:</div>
+                            <div class="history-detail-value">${order.paymentMethod}</div>
+                        </div>
+                        <div class="history-detail-row">
+                            <div class="history-detail-label">Delivery Address:</div>
+                            <div class="history-detail-value">${order.location}</div>
+                        </div>
+                        ${order.cancelReason ? `
+                        <div class="history-detail-row">
+                            <div class="history-detail-label">Cancellation Reason:</div>
+                            <div class="history-detail-value">${order.cancelReason}</div>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+                orderHistoryCardsContainer.appendChild(historyCard);
+            });
+        }
+
+        // NEW: Render cancel history as vertical cards
+        function renderCancelHistory() {
+            const cancelHistoryCardsContainer = document.getElementById('cancel-history-cards');
+            cancelHistoryCardsContainer.innerHTML = '';
+            
+            // Filter cancel history to show only those belonging to the current customer
+            // INCLUDE ONLY CANCELLED ORDERS IN CANCEL HISTORY
+            const customerCancelHistory = cancelHistory.filter(order => 
+                order.customerId === currentUser.id && order.status === 'cancelled'
+            );
+            
+            if (customerCancelHistory.length === 0) {
+                cancelHistoryCardsContainer.style.display = 'none';
+                document.getElementById('cancel-history-empty').style.display = 'block';
+                return;
+            }
+            
+            cancelHistoryCardsContainer.style.display = 'grid';
+            document.getElementById('cancel-history-empty').style.display = 'none';
+            
+            // Show cancelled orders in reverse chronological order (newest first)
+            customerCancelHistory.reverse().forEach(order => {
+                const cancelCard = document.createElement('div');
+                cancelCard.className = 'cancel-history-card';
+                cancelCard.innerHTML = `
+                    <div class="cancel-history-header">
+                        <div>
+                            <div class="cancel-history-order-id">Order #${order.id}</div>
+                            <div class="cancel-history-date">Cancelled on: ${order.cancelledDate}</div>
+                        </div>
+                        <div class="cancel-history-status">Cancelled</div>
+                    </div>
+                    <div class="cancel-history-details">
+                        <div class="cancel-history-detail-row">
+                            <div class="cancel-history-detail-label">Customer:</div>
+                            <div class="cancel-history-detail-value">${order.customerName}</div>
+                        </div>
+                        <div class="cancel-history-detail-row">
+                            <div class="cancel-history-detail-label">Contact:</div>
+                            <div class="cancel-history-detail-value">${order.customerContact}</div>
+                        </div>
+                        <div class="cancel-history-detail-row">
+                            <div class="cancel-history-detail-label">Items:</div>
+                            <div class="cancel-history-detail-value">${order.items.map(item => `${item.name} (${item.quantity})`).join(', ')}</div>
+                        </div>
+                        <div class="cancel-history-detail-row">
+                            <div class="cancel-history-detail-label">Total:</div>
+                            <div class="cancel-history-detail-value">₱${order.total.toFixed(2)}</div>
+                        </div>
+                        <div class="cancel-history-detail-row">
+                            <div class="cancel-history-detail-label">Payment Method:</div>
+                            <div class="cancel-history-detail-value">${order.paymentMethod}</div>
+                        </div>
+                        <div class="cancel-history-detail-row">
+                            <div class="cancel-history-detail-label">Delivery Address:</div>
+                            <div class="cancel-history-detail-value">${order.location}</div>
+                        </div>
+                        <div class="cancel-history-detail-row">
+                            <div class="cancel-history-detail-label">Cancellation Reason:</div>
+                            <div class="cancel-history-detail-value">${order.cancelReason || 'No reason provided'}</div>
+                        </div>
+                    </div>
+                `;
+                cancelHistoryCardsContainer.appendChild(cancelCard);
+            });
+        }
+
+        // Move delivered and cancelled orders to history
+        function moveDeliveredOrdersToHistory() {
+            const completedOrders = orders.filter(order => order.status === 'delivered' || order.status === 'cancelled');
+            
+            completedOrders.forEach(completedOrder => {
+                // Check if order is already in history
+                if (!orderHistory.find(historyOrder => historyOrder.id === completedOrder.id)) {
+                    orderHistory.push({
+                        ...completedOrder,
+                        completedDate: new Date().toLocaleDateString()
+                    });
+                }
+                
+                // Move cancelled orders to cancel history
+                if (completedOrder.status === 'cancelled' && !cancelHistory.find(cancelOrder => cancelOrder.id === completedOrder.id)) {
+                    cancelHistory.push({
+                        ...completedOrder,
+                        cancelledDate: new Date().toLocaleDateString()
+                    });
+                }
+            });
+            
+            // Remove completed orders from current orders
+            orders = orders.filter(order => order.status !== 'delivered' && order.status !== 'cancelled');
+            
+            // Update order history display if on that page
+            if (document.getElementById('order-history').classList.contains('active')) {
+                renderOrderHistory();
+            }
+            
+            // Update cancel history display if on that page
+            if (document.getElementById('cancel-history').classList.contains('active')) {
+                renderCancelHistory();
+            }
+        }
+
+        // Toggle password visibility
+        function togglePasswordVisibility(passwordField, toggleButton) {
+            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordField.setAttribute('type', type);
+            
+            // Toggle eye icon
+            if (type === 'text') {
+                toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>';
+            } else {
+                toggleButton.innerHTML = '<i class="fas fa-eye"></i>';
+            }
+        }
+
+        // Validate address for both payment methods
+        function validateAddress() {
+            const location = deliveryLocationInput.value.trim();
+            const customerName = customerNameInput.value.trim();
+            const customerContact = customerContactInput.value.trim();
+            
+            if (!customerName) {
+                showNotification('Please enter your full name', 'error');
+                return false;
+            }
+            
+            if (!customerContact || customerContact.length !== 11 || !customerContact.startsWith('09')) {
+                showNotification('Please enter a valid contact number (09XXXXXXXXX)', 'error');
+                return false;
+            }
+            
+            if (!location) {
+                showNotification('Please enter your delivery address', 'error');
+                return false;
+            }
+            
+            userLocation = location;
+            return true;
+        }
+
+        // Open item form modal for adding or editing
+        function openItemForm(itemId = null) {
+            editingItemId = itemId;
+            
+            if (itemId) {
+                // Editing existing item
+                const item = menuItems.find(item => item.id === itemId);
+                if (item) {
+                    itemFormTitle.textContent = 'Edit Item';
+                    itemNameInput.value = item.name;
+                    itemPriceInput.value = item.price;
+                    itemDescriptionInput.value = item.description;
+                    itemImageInput.value = item.image;
+                    updateImagePreview(item.image);
+                }
+            } else {
+                // Adding new item
+                itemFormTitle.textContent = 'Add New Item';
+                itemForm.reset();
+                updateImagePreview('');
+            }
+            
+            itemFormModal.classList.add('active');
+        }
+
+        // Update image preview
+        function updateImagePreview(imageUrl) {
+            if (imageUrl) {
+                imagePreview.innerHTML = `<img src="${imageUrl}" alt="Preview">`;
+            } else {
+                imagePreview.innerHTML = `
+                    <div class="image-preview-placeholder">
+                        <i class="fas fa-image"></i>
+                        <p>Image preview</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Save item (add or update)
+        function saveItem() {
+            const name = itemNameInput.value.trim();
+            const price = parseFloat(itemPriceInput.value);
+            const description = itemDescriptionInput.value.trim();
+            const image = itemImageInput.value.trim();
+            
+            if (!name || !price || !description) {
+                showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            if (editingItemId) {
+                // Update existing item
+                const itemIndex = menuItems.findIndex(item => item.id === editingItemId);
+                if (itemIndex !== -1) {
+                    menuItems[itemIndex] = {
+                        ...menuItems[itemIndex],
+                        name,
+                        price,
+                        description,
+                        image: image || menuItems[itemIndex].image
+                    };
+                    showNotification('Item updated successfully', 'success');
+                }
+            } else {
+                // Add new item
+                const newItem = {
+                    id: nextItemId++,
+                    name,
+                    price,
+                    description,
+                    image: image || 'image/default-cake.jpg' // Default image if none provided
+                };
+                menuItems.push(newItem);
+                showNotification('Item added successfully', 'success');
+            }
+            
+            // Update UI
+            renderItemsTable();
+            renderItemsSummary();
+            renderMenuItems(); // Update the customer menu view
+            
+            // Close modal
+            itemFormModal.classList.remove('active');
+            editingItemId = null;
+        }
+
+        // Open delete confirmation modal
+        function openDeleteItemModal(itemId) {
+            deletingItemId = itemId;
+            deleteItemModal.classList.add('active');
+        }
+
+        // Delete item
+        function deleteItem() {
+            if (deletingItemId) {
+                menuItems = menuItems.filter(item => item.id !== deletingItemId);
+                showNotification('Item deleted successfully', 'success');
+                
+                // Update UI
+                renderItemsTable();
+                renderItemsSummary();
+                renderMenuItems(); // Update the customer menu view
+                
+                // Close modal
+                deleteItemModal.classList.remove('active');
+                deletingItemId = null;
+            }
+        }
+
+        // NEW: Open user form modal for editing
+        function openUserForm(userId) {
+            editingUserId = userId;
+            
+            if (userId) {
+                // Editing existing user
+                const user = users.find(user => user.id === userId);
+                if (user) {
+                    userFormTitle.textContent = 'Edit User';
+                    userNameInput.value = user.name;
+                    userUsernameInput.value = user.username;
+                    userEmailInput.value = user.email;
+                    userRoleSelect.value = user.role;
+                    userPasswordInput.value = '';
+                }
+            }
+            
+            userFormModal.classList.add('active');
+        }
+
+        // NEW: Save user (update)
+        function saveUser() {
+            const name = userNameInput.value.trim();
+            const username = userUsernameInput.value.trim();
+            const email = userEmailInput.value.trim();
+            const role = userRoleSelect.value;
+            const password = userPasswordInput.value;
+            
+            if (!name || !username || !email || !role) {
+                showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            // Validate email format (must be @gmail.com)
+            if (!validateEmail(email)) {
+                showNotification('Email must be a valid @gmail.com address', 'error');
+                return;
+            }
+            
+            // Check if email already exists for another user
+            const existingUser = users.find(user => user.email === email && user.id !== editingUserId);
+            if (existingUser) {
+                showNotification('An account with this email already exists', 'error');
+                return;
+            }
+            
+            // Update existing user
+            const userIndex = users.findIndex(user => user.id === editingUserId);
+            if (userIndex !== -1) {
+                users[userIndex] = {
+                    ...users[userIndex],
+                    name,
+                    username,
+                    email,
+                    role,
+                    // Only update password if a new one was provided
+                    password: password ? password : users[userIndex].password
+                };
+                showNotification('User updated successfully', 'success');
+            }
+            
+            // Update UI
+            renderUsersTable();
+            renderUsersSummary();
+            
+            // Close modal
+            userFormModal.classList.remove('active');
+            editingUserId = null;
+        }
+
+        // NEW: Open delete user confirmation modal
+        function openDeleteUserModal(userId) {
+            deletingUserId = userId;
+            deleteUserModal.classList.add('active');
+        }
+
+        // NEW: Delete user
+        function deleteUser() {
+            if (deletingUserId) {
+                // Don't allow deleting the current user
+                if (deletingUserId === currentUser.id) {
+                    showNotification('You cannot delete your own account', 'error');
+                    deleteUserModal.classList.remove('active');
+                    deletingUserId = null;
+                    return;
+                }
+                
+                users = users.filter(user => user.id !== deletingUserId);
+                showNotification('User deleted successfully', 'success');
+                
+                // Update UI
+                renderUsersTable();
+                renderUsersSummary();
+                
+                // Close modal
+                deleteUserModal.classList.remove('active');
+                deletingUserId = null;
+            }
+        }
+
+        // Validate email format (must be @gmail.com)
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@gmail\.com$/;
+            return emailRegex.test(email);
+        }
+
+        // Validate password requirements
+        function validatePassword(password) {
+            const hasLength = password.length >= 8;
+            const hasLetter = /[a-zA-Z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            
+            // Update requirement indicators
+            reqLength.className = hasLength ? 'requirement-met' : 'requirement-not-met';
+            reqLetter.className = hasLetter ? 'requirement-met' : 'requirement-not-met';
+            reqNumber.className = hasNumber ? 'requirement-met' : 'requirement-not-met';
+            
+            return hasLength && hasLetter && hasNumber;
+        }
+
+        // Create account function
+        // Returns the created user object on success, or null on failure
+        function createAccount(name, email, password, confirmPassword) {
+            // Validate inputs
+            if (!name || !email || !password || !confirmPassword) {
+                createAccountError.textContent = 'All fields are required';
+                return null;
+            }
+
+            // Validate email format
+            if (!validateEmail(email)) {
+                createAccountError.textContent = 'Email must be a valid @gmail.com address';
+                return null;
+            }
+
+            // Validate password requirements
+            if (!validatePassword(password)) {
+                createAccountError.textContent = 'Password does not meet requirements';
+                return null;
+            }
+
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                createAccountError.textContent = 'Passwords do not match';
+                return null;
+            }
+
+            // Check if email already exists
+            const existingUser = users.find(user => user.email === email);
+            if (existingUser) {
+                createAccountError.textContent = 'An account with this email already exists';
+                return null;
+            }
+
+            // Create new user (only customer accounts can be created)
+            const newUser = {
+                id: nextUserId++,
+                name: name,
+                role: 'customer',
+                username: email.split('@')[0], // Use email prefix as username
+                password: password,
+                email: email
+            };
+
+            users.push(newUser);
+            // Clear any previous error
+            createAccountError.textContent = '';
+            return newUser;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Login form submission
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = loginEmail.value;
+                const password = loginPassword.value;
+                
+                // Find user with matching credentials and role
+                const user = users.find(u => 
+                    u.email === email && 
+                    u.password === password && 
+                    u.role === selectedLoginRole
+                );
+                
+                if (user) {
+                    currentUser = user;
+                    
+                    loginPage.style.display = 'none';
+                    dashboard.classList.add('active');
+                    updateUserInterface();
+                    showNotification(`Welcome, ${user.name}!`, 'success');
+                } else {
+                    loginError.textContent = `Invalid ${selectedLoginRole} credentials. Please try again.`;
+                }
+            });
+            
+            // Create account form submission
+            createAccountForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                createAccountError.textContent = '';
+                const name = createName.value.trim();
+                const email = createEmail.value.trim();
+                const password = createPassword.value;
+                const confirmPasswordValue = confirmPasswordInput.value;
+
+                // createAccount now returns the newly created user on success, or null on failure
+                const newUser = createAccount(name, email, password, confirmPasswordValue);
+                if (newUser) {
+                    // Clear form
+                    createAccountForm.reset();
+
+                    // Show success notification and return to login page
+                    showNotification('Account created successfully! You can now log in.', 'success');
+                    showLoginPage();
+                }
+            });
+            
+            // Show create account form
+            showCreateAccountBtn.addEventListener('click', () => {
+                showCreateAccountPage();
+            });
+            
+            // Show login form
+            showLoginBtn.addEventListener('click', () => {
+                showLoginPage();
+            });
+            
+            // Password requirement validation
+            createPassword.addEventListener('input', () => {
+                validatePassword(createPassword.value);
+            });
+            
+            // Login tab events
+            loginTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    selectedLoginRole = tab.getAttribute('data-role');
+                    updateLoginTabs();
+                    loginError.textContent = '';
+                    loginEmail.value = '';
+                });
+            });
+            
+            // Email field focus event for suggestions
+            loginEmail.addEventListener('focus', () => {
+                updateEmailSuggestions();
+            });
+            
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!loginEmail.contains(e.target) && !emailSuggestions.contains(e.target)) {
+                    emailSuggestions.style.display = 'none';
+                }
+            });
+            
+            // Logout button
+            logoutBtn.addEventListener('click', () => {
+                currentUser = null;
+                dashboard.classList.remove('active');
+                loginPage.style.display = 'flex';
+                loginEmail.value = '';
+                loginPassword.value = '';
+                loginError.textContent = '';
+            });
+            
+            // Password visibility toggle
+            toggleLoginPassword.addEventListener('click', () => {
+                togglePasswordVisibility(loginPassword, toggleLoginPassword);
+            });
+            
+            toggleCreatePassword.addEventListener('click', () => {
+                togglePasswordVisibility(createPassword, toggleCreatePassword);
+            });
+            
+            toggleConfirmPassword.addEventListener('click', () => {
+                togglePasswordVisibility(confirmPasswordInput, toggleConfirmPassword);
+            });
+            
+            // Navigation buttons
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const sectionId = button.getAttribute('data-section');
+                    showSection(sectionId);
+                });
+            });
+            
+            // Mobile menu toggle
+            mobileMenuToggle.addEventListener('click', () => {
+                const navContainer = document.querySelector('.nav-container');
+                if (navContainer.style.display === 'flex') {
+                    navContainer.style.display = 'none';
+                } else {
+                    navContainer.style.display = 'flex';
+                }
+            });
+            
+            // Add to cart (delegated event)
+            menuItemsContainer.addEventListener('click', (e) => {
+                if (e.target.closest('.add-to-cart')) {
+                    const itemId = parseInt(e.target.closest('.add-to-cart').getAttribute('data-id'));
+                    addToCart(itemId);
+                }
+            });
+            
+            // Cart operations (delegated events)
+            cartCardsContainer.addEventListener('click', (e) => {
+                if (e.target.closest('.increase-quantity')) {
+                    const itemId = parseInt(e.target.closest('.increase-quantity').getAttribute('data-id'));
+                    increaseQuantity(itemId);
+                } else if (e.target.closest('.decrease-quantity')) {
+                    const itemId = parseInt(e.target.closest('.decrease-quantity').getAttribute('data-id'));
+                    decreaseQuantity(itemId);
+                } else if (e.target.closest('.remove-btn')) {
+                    const itemId = parseInt(e.target.closest('.remove-btn').getAttribute('data-id'));
+                    removeFromCart(itemId);
+                }
+            });
+            
+            // Proceed to payment
+            proceedToPaymentButton.addEventListener('click', () => {
+                if (cart.length === 0) {
+                    showNotification('Your cart is empty', 'warning');
+                    return;
+                }
+                showSection('payment');
+            });
+            
+            // Payment method selection
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', () => {
+                    paymentMethods.forEach(m => m.classList.remove('selected'));
+                    method.classList.add('selected');
+                    
+                    // Show/hide appropriate forms based on payment method
+                    const paymentMethod = method.getAttribute('data-method');
+                    if (paymentMethod === 'cod') {
+                        gcashPaymentForm.style.display = 'none';
+                        codInfo.style.display = 'block';
+                        confirmGcashPaymentButton.style.display = 'none';
+                        completeCodPaymentButton.style.display = 'block';
+                    } else if (paymentMethod === 'gcash') {
+                        gcashPaymentForm.style.display = 'block';
+                        codInfo.style.display = 'none';
+                        confirmGcashPaymentButton.style.display = 'block';
+                        completeCodPaymentButton.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Confirm GCash payment
+            confirmGcashPaymentButton.addEventListener('click', () => {
+                if (!validateAddress()) {
+                    return;
+                }
+                
+                // Simulate GCash payment processing
+                showNotification('Processing GCash payment...', 'info');
+                
+                setTimeout(() => {
+                    createOrder('GCash');
+                    showNotification('GCash payment successful! Order placed.', 'success');
+                }, 2000);
+            });
+            
+            // Complete COD payment
+            completeCodPaymentButton.addEventListener('click', () => {
+                if (!validateAddress()) {
+                    return;
+                }
+                
+                createOrder('Cash on Delivery');
+                showNotification('COD order placed successfully!', 'success');
+            });
+            
+            // Update order status (delegated event)
+            ordersTableBody.addEventListener('change', (e) => {
+                if (e.target.classList.contains('update-status')) {
+                    const orderId = parseInt(e.target.getAttribute('data-id'));
+                    const newStatus = e.target.value;
+                    updateOrderStatus(orderId, newStatus);
+                }
+            });
+            
+            // Cancel order modal events
+            closeCancelModal.addEventListener('click', () => {
+                cancelOrderModal.classList.remove('active');
+                orderToCancel = null;
+                cancelReason.value = '';
+            });
+            
+            cancelCancelOrder.addEventListener('click', () => {
+                cancelOrderModal.classList.remove('active');
+                orderToCancel = null;
+                cancelReason.value = '';
+            });
+            
+            confirmCancelOrder.addEventListener('click', () => {
+                if (orderToCancel) {
+                    cancelOrder(orderToCancel, cancelReason.value);
+                    cancelOrderModal.classList.remove('active');
+                    orderToCancel = null;
+                    cancelReason.value = '';
+                }
+            });
+            
+            // Cancel order button (delegated event)
+            orderTrackingContainer.addEventListener('click', (e) => {
+                if (e.target.closest('.cancel-order-btn')) {
+                    const orderId = parseInt(e.target.closest('.cancel-order-btn').getAttribute('data-id'));
+                    openCancelOrderModal(orderId);
+                }
+            });
+            
+            // Admin user actions (delegated event)
+            usersTableBody.addEventListener('click', (e) => {
+                if (e.target.closest('.edit-user-btn')) {
+                    const userId = parseInt(e.target.closest('.edit-user-btn').getAttribute('data-id'));
+                    openUserForm(userId);
+                } else if (e.target.closest('.delete-user-btn')) {
+                    const userId = parseInt(e.target.closest('.delete-user-btn').getAttribute('data-id'));
+                    openDeleteUserModal(userId);
+                }
+            });
+            
+            // Manage Items event listeners
+            addItemBtn.addEventListener('click', () => {
+                openItemForm();
+            });
+            
+            // Close item form modal
+            closeItemFormModal.addEventListener('click', () => {
+                itemFormModal.classList.remove('active');
+                editingItemId = null;
+            });
+            
+            cancelItemForm.addEventListener('click', () => {
+                itemFormModal.classList.remove('active');
+                editingItemId = null;
+            });
+            
+            // Save item form
+            itemForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                saveItem();
+            });
+            
+            // Update image preview when image URL changes
+            itemImageInput.addEventListener('input', () => {
+                updateImagePreview(itemImageInput.value);
+            });
+            
+            // Item actions (delegated event)
+            itemsTableBody.addEventListener('click', (e) => {
+                if (e.target.closest('.edit-btn')) {
+                    const itemId = parseInt(e.target.closest('.edit-btn').getAttribute('data-id'));
+                    openItemForm(itemId);
+                } else if (e.target.closest('.delete-btn')) {
+                    const itemId = parseInt(e.target.closest('.delete-btn').getAttribute('data-id'));
+                    openDeleteItemModal(itemId);
+                }
+            });
+            
+            // Delete item modal events
+            closeDeleteItemModal.addEventListener('click', () => {
+                deleteItemModal.classList.remove('active');
+                deletingItemId = null;
+            });
+            
+            cancelDeleteItem.addEventListener('click', () => {
+                deleteItemModal.classList.remove('active');
+                deletingItemId = null;
+            });
+            
+            confirmDeleteItem.addEventListener('click', () => {
+                deleteItem();
+            });
+            
+            // NEW: User form modal events
+            closeUserFormModal.addEventListener('click', () => {
+                userFormModal.classList.remove('active');
+                editingUserId = null;
+            });
+            
+            cancelUserForm.addEventListener('click', () => {
+                userFormModal.classList.remove('active');
+                editingUserId = null;
+            });
+            
+            // Save user form
+            userForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                saveUser();
+            });
+            
+            // Delete user modal events
+            closeDeleteUserModal.addEventListener('click', () => {
+                deleteUserModal.classList.remove('active');
+                deletingUserId = null;
+            });
+            
+            cancelDeleteUser.addEventListener('click', () => {
+                deleteUserModal.classList.remove('active');
+                deletingUserId = null;
+            });
+            
+            confirmDeleteUser.addEventListener('click', () => {
+                deleteUser();
+            });
+        }
+
+        // Show create account page
+        function showCreateAccountPage() {
+            loginPage.style.display = 'none';
+            createAccountPage.style.display = 'flex';
+            createAccountError.textContent = '';
+        }
+
+        // Show login page
+        function showLoginPage() {
+            createAccountPage.style.display = 'none';
+            loginPage.style.display = 'flex';
+            loginError.textContent = '';
+        }
+
+        // Create order
+        function createOrder(paymentMethod) {
+            const customerName = customerNameInput.value;
+            const customerContact = customerContactInput.value;
+            const deliveryLocation = deliveryLocationInput.value;
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const order = {
+                id: currentOrderId++,
+                customer: currentUser.name,
+                customerName: customerName,
+                customerContact: customerContact,
+                customerId: currentUser.id, // Store the customer ID with the order
+                items: [...cart],
+                total: total,
+                paymentMethod: paymentMethod,
+                status: 'pending',
+                date: new Date().toLocaleDateString(),
+                location: deliveryLocation
+            };
+            
+            orders.push(order);
+            
+            // Update GCash order ID for next order
+            gcashOrderIdElement.textContent = `#${currentOrderId}`;
+            
+            // Clear cart and form fields
+            cart = [];
+            customerNameInput.value = '';
+            customerContactInput.value = '';
+            deliveryLocationInput.value = '';
+            updateCartCount();
+            
+            // Return to browse menu after a delay
+            setTimeout(() => {
+                showSection('browse-menu');
+            }, 2000);
+        }
+
+        // Cart functions
+        function addToCart(itemId) {
+            const item = menuItems.find(menuItem => menuItem.id === itemId);
+            const existingItem = cart.find(cartItem => cartItem.id === itemId);
+            
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: 1
+                });
+            }
+            
+            updateCartCount();
+            showNotification(`${item.name} added to cart`, 'success');
+        }
+
+        function increaseQuantity(itemId) {
+            const item = cart.find(cartItem => cartItem.id === itemId);
+            if (item) {
+                item.quantity++;
+                renderCart();
+                updateCartCount();
+            }
+        }
+
+        function decreaseQuantity(itemId) {
+            const item = cart.find(cartItem => cartItem.id === itemId);
+            if (item) {
+                item.quantity--;
+                if (item.quantity <= 0) {
+                    removeFromCart(itemId);
+                } else {
+                    renderCart();
+                    updateCartCount();
+                }
+            }
+        }
+
+        function removeFromCart(itemId) {
+            const item = cart.find(item => item.id === itemId);
+            cart = cart.filter(item => item.id !== itemId);
+            renderCart();
+            updateCartCount();
+            showNotification(`${item.name} removed from cart`, 'info');
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            
+            let icon = 'fa-info-circle';
+            let title = 'Information';
+            
+            switch(type) {
+                case 'success':
+                    icon = 'fa-check-circle';
+                    title = 'Success';
+                    break;
+                case 'error':
+                    icon = 'fa-exclamation-circle';
+                    title = 'Error';
+                    break;
+                case 'warning':
+                    icon = 'fa-exclamation-triangle';
+                    title = 'Warning';
+                    break;
+            }
+            
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">${title}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            // Animate out and remove - CHANGED FROM 4000ms TO 2000ms
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 2000); // Reduced from 4000ms to 2000ms
+        }
+
+        // Order management functions
+        function updateOrderStatus(orderId, newStatus) {
+            const order = orders.find(order => order.id === orderId);
+            if (order) {
+                order.status = newStatus;
+                
+                // If order is delivered or cancelled, move it to history
+                if (newStatus === 'delivered' || newStatus === 'cancelled') {
+                    moveDeliveredOrdersToHistory();
+                    // Update both orders table and order history if on those pages
+                    if (document.getElementById('view-orders').classList.contains('active')) {
+                        renderOrdersTable();
+                    }
+                    if (document.getElementById('order-history').classList.contains('active')) {
+                        renderOrderHistory();
+                    }
+                    if (document.getElementById('cancel-history').classList.contains('active')) {
+                        renderCancelHistory();
+                    }
+                }
+                
+                renderOrdersTable();
+                showNotification(`Order #${orderId} status updated to ${newStatus}`, 'success');
+            }
+        }
+
+        // Cancel order functions
+        function openCancelOrderModal(orderId) {
+            orderToCancel = orderId;
+            cancelOrderModal.classList.add('active');
+        }
+
+        function cancelOrder(orderId, reason) {
+            const order = orders.find(order => order.id === orderId);
+            if (order) {
+                order.status = 'cancelled';
+                order.cancelReason = reason || 'No reason provided';
+                
+                // Move cancelled order to history
+                moveDeliveredOrdersToHistory();
+                
+                // Update UI
+                if (document.getElementById('track-order').classList.contains('active')) {
+                    renderOrderTracking();
+                    renderTrackingSummary();
+                }
+                if (document.getElementById('order-history').classList.contains('active')) {
+                    renderOrderHistory();
+                }
+                if (document.getElementById('cancel-history').classList.contains('active')) {
+                    renderCancelHistory();
+                }
+                
+                showNotification(`Order #${orderId} has been cancelled`, 'success');
+            }
+        }
+
+        // Initialize the application
+        init();
+    </script>
+</body>
+</html>
