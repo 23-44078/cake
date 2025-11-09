@@ -80,6 +80,26 @@
             }
         }
 
+        /* REMOVED: Create Account Page Animation - Cube Effect */
+        /* .create-account-slide {
+            animation: createAccountCube 1s ease-out;
+        }
+
+        @keyframes createAccountCube {
+            0% {
+                opacity: 0;
+                transform: rotateY(90deg) scale(0.8);
+            }
+            50% {
+                opacity: 0.7;
+                transform: rotateY(-10deg) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: rotateY(0deg) scale(1);
+            }
+        } */
+
         .login-logo {
             display: flex;
             align-items: center;
@@ -246,6 +266,60 @@
 
         .toggle-password:hover {
             color: var(--primary);
+        }
+
+        /* NEW: Password Validation Styles */
+        .password-strength {
+            margin-top: 10px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .strength-indicator {
+            height: 4px;
+            flex: 1;
+            margin: 0 2px;
+            border-radius: 2px;
+            background-color: var(--light-gray);
+            transition: var(--transition);
+        }
+
+        .strength-indicator.active {
+            background-color: var(--success);
+        }
+
+        .strength-indicator.weak {
+            background-color: var(--danger);
+        }
+
+        .strength-indicator.medium {
+            background-color: var(--warning);
+        }
+
+        .strength-indicator.strong {
+            background-color: var(--success);
+        }
+
+        /* REMOVED: Password Requirements Section */
+        .password-requirements {
+            display: none; /* Hide the password requirements */
+        }
+
+        .password-match {
+            margin-top: 5px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .password-match.valid {
+            color: var(--success);
+        }
+
+        .password-match.invalid {
+            color: var(--danger);
         }
 
         /* Dashboard Styles */
@@ -1627,6 +1701,29 @@
             text-align: center;
             padding: 20px;
         }
+        
+        /* Image Upload Styles */
+        .image-upload-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .image-upload-btn {
+            background-color: var(--light-gray);
+            color: var(--dark);
+            border: 1px dashed var(--gray);
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .image-upload-btn:hover {
+            background-color: rgba(255, 107, 139, 0.1);
+            border-color: var(--primary);
+        }
 
         /* Notification Styles */
         .notification {
@@ -2099,29 +2196,6 @@
             text-decoration: underline;
         }
 
-        /* Password Requirements Styles */
-        .password-requirements {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: var(--light-gray);
-            border-radius: 8px;
-            font-size: 12px;
-            color: var(--gray);
-        }
-
-        .password-requirements ul {
-            margin-left: 20px;
-            margin-top: 5px;
-        }
-
-        .requirement-met {
-            color: var(--success);
-        }
-
-        .requirement-not-met {
-            color: var(--danger);
-        }
-
         /* Cancel History Section Styles */
         .cancel-history-container {
             background-color: white;
@@ -2486,14 +2560,14 @@
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
-                    <div class="password-requirements">
-                        <p>Password must contain:</p>
-                        <ul>
-                            <li id="req-length" class="requirement-not-met">At least 8 characters</li>
-                            <li id="req-letter" class="requirement-not-met">At least one letter</li>
-                            <li id="req-number" class="requirement-not-met">At least one number</li>
-                        </ul>
+                    <!-- NEW: Password Strength Indicator -->
+                    <div class="password-strength">
+                        <div class="strength-indicator" id="strength-1"></div>
+                        <div class="strength-indicator" id="strength-2"></div>
+                        <div class="strength-indicator" id="strength-3"></div>
+                        <div class="strength-indicator" id="strength-4"></div>
                     </div>
+                    <!-- REMOVED: Password Requirements Section -->
                 </div>
                 <div class="form-group">
                     <label for="confirm-password">Confirm Password</label>
@@ -2502,6 +2576,11 @@
                         <button type="button" class="toggle-password" id="toggle-confirm-password">
                             <i class="fas fa-eye"></i>
                         </button>
+                    </div>
+                    <!-- NEW: Password Match Indicator -->
+                    <div class="password-match" id="password-match">
+                        <i class="fas fa-times"></i>
+                        <span>Passwords do not match</span>
                     </div>
                 </div>
                 
@@ -2838,7 +2917,7 @@
                                     </div>
                                     <div>
                                         <h4>Address</h4>
-                                        <p>123 Sweet Street, Dessert City</p>
+                                        <p>420 Sweet Street, Dessert City</p>
                                     </div>
                                 </div>
                                 <div class="contact-item">
@@ -3011,8 +3090,14 @@
                     <textarea id="item-description" required placeholder="Enter item description" rows="3"></textarea>
                 </div>
                 <div class="form-group full-width">
-                    <label for="item-image">Image URL</label>
-                    <input type="text" id="item-image" placeholder="Enter image URL">
+                    <label for="item-image">Image</label>
+                    <div class="image-upload-container">
+                        <input type="file" id="item-image-file" accept="image/*" style="display: none;">
+                        <button type="button" class="image-upload-btn" id="choose-image-btn">
+                            <i class="fas fa-image"></i> Choose Image
+                        </button>
+                        <input type="text" id="item-image-url" placeholder="Or enter image URL">
+                    </div>
                     <div class="image-preview" id="image-preview">
                         <div class="image-preview-placeholder">
                             <i class="fas fa-image"></i>
@@ -3163,9 +3248,9 @@
         let orderHistory = [];
         let cancelHistory = [];
         let users = [
-            { id: 1, name: "Customer User", role: "customer", username: "customer", password: "Cust-123", email: "customer@gmail.com" },
-            { id: 2, name: "Staff User", role: "staff", username: "staff", password: "Staff-123", email: "staff@gmail.com" },
-            { id: 3, name: "Admin User", role: "admin", username: "admin", password: "Admin-123", email: "admin@gmail.com" }
+            { id: 1, name: "Customer User", role: "customer", username: "customer", password: "Cust-123!", email: "customer@gmail.com" },
+            { id: 2, name: "Staff User", role: "staff", username: "staff", password: "Staff-123!", email: "staff@gmail.com" },
+            { id: 3, name: "Admin User", role: "admin", username: "admin", password: "Admin-123!", email: "admin@gmail.com" }
         ];
 
         let currentUser = null;
@@ -3222,6 +3307,14 @@
         const reqLength = document.getElementById('req-length');
         const reqLetter = document.getElementById('req-letter');
         const reqNumber = document.getElementById('req-number');
+        const reqSymbol = document.getElementById('req-symbol');
+
+        // NEW: Password strength indicators
+        const strengthIndicator1 = document.getElementById('strength-1');
+        const strengthIndicator2 = document.getElementById('strength-2');
+        const strengthIndicator3 = document.getElementById('strength-3');
+        const strengthIndicator4 = document.getElementById('strength-4');
+        const passwordMatch = document.getElementById('password-match');
 
         // Suggestion Dropdown Element
         const emailSuggestions = document.getElementById('email-suggestions');
@@ -3284,7 +3377,9 @@
         const itemNameInput = document.getElementById('item-name');
         const itemPriceInput = document.getElementById('item-price');
         const itemDescriptionInput = document.getElementById('item-description');
-        const itemImageInput = document.getElementById('item-image');
+        const itemImageFileInput = document.getElementById('item-image-file');
+        const itemImageUrlInput = document.getElementById('item-image-url');
+        const chooseImageBtn = document.getElementById('choose-image-btn');
         const imagePreview = document.getElementById('image-preview');
         const saveItemBtn = document.getElementById('save-item');
         const deleteItemModal = document.getElementById('delete-item-modal');
@@ -3321,6 +3416,81 @@
             
             // Move any existing delivered orders to history
             moveDeliveredOrdersToHistory();
+        }
+
+        // NEW: Update password strength indicators
+        function updatePasswordStrength(password) {
+            // Reset all indicators
+            strengthIndicator1.className = 'strength-indicator';
+            strengthIndicator2.className = 'strength-indicator';
+            strengthIndicator3.className = 'strength-indicator';
+            strengthIndicator4.className = 'strength-indicator';
+            
+            if (!password) return;
+            
+            // Calculate strength
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 8) {
+                strength++;
+                strengthIndicator1.className = 'strength-indicator active';
+            }
+            
+            // Letter check
+            if (/[a-zA-Z]/.test(password)) {
+                strength++;
+                strengthIndicator2.className = 'strength-indicator active';
+            }
+            
+            // Number check
+            if (/\d/.test(password)) {
+                strength++;
+                strengthIndicator3.className = 'strength-indicator active';
+            }
+            
+            // Symbol check
+            if (/[!@#$%^&*]/.test(password)) {
+                strength++;
+                strengthIndicator4.className = 'strength-indicator active';
+            }
+            
+            // Set strength class
+            if (strength > 0) {
+                const indicators = [strengthIndicator1, strengthIndicator2, strengthIndicator3, strengthIndicator4];
+                for (let i = 0; i < strength; i++) {
+                    if (strength === 1) {
+                        indicators[i].classList.add('weak');
+                    } else if (strength === 2) {
+                        indicators[i].classList.add('medium');
+                    } else if (strength >= 3) {
+                        indicators[i].classList.add('strong');
+                    }
+                }
+            }
+        }
+
+        // NEW: Check if passwords match
+        function checkPasswordMatch() {
+            const password = createPassword.value;
+            const confirmPassword = confirmPasswordInput.value;
+            
+            if (!password || !confirmPassword) {
+                passwordMatch.style.display = 'none';
+                return false;
+            }
+            
+            if (password === confirmPassword) {
+                passwordMatch.innerHTML = '<i class="fas fa-check"></i><span>Passwords match</span>';
+                passwordMatch.className = 'password-match valid';
+                passwordMatch.style.display = 'flex';
+                return true;
+            } else {
+                passwordMatch.innerHTML = '<i class="fas fa-times"></i><span>Passwords do not match</span>';
+                passwordMatch.className = 'password-match invalid';
+                passwordMatch.style.display = 'flex';
+                return false;
+            }
         }
 
         // Update suggestion dropdown based on selected role
@@ -4067,7 +4237,7 @@
                     itemNameInput.value = item.name;
                     itemPriceInput.value = item.price;
                     itemDescriptionInput.value = item.description;
-                    itemImageInput.value = item.image;
+                    itemImageUrlInput.value = item.image;
                     updateImagePreview(item.image);
                 }
             } else {
@@ -4099,11 +4269,19 @@
             const name = itemNameInput.value.trim();
             const price = parseFloat(itemPriceInput.value);
             const description = itemDescriptionInput.value.trim();
-            const image = itemImageInput.value.trim();
+            let image = itemImageUrlInput.value.trim();
             
             if (!name || !price || !description) {
                 showNotification('Please fill in all required fields', 'error');
                 return;
+            }
+            
+            // Check if a file was uploaded
+            const file = itemImageFileInput.files[0];
+            if (file) {
+                // In a real application, you would upload the file to a server
+                // For this demo, we'll create a local URL
+                image = URL.createObjectURL(file);
             }
             
             if (editingItemId) {
@@ -4276,13 +4454,15 @@
             const hasLength = password.length >= 8;
             const hasLetter = /[a-zA-Z]/.test(password);
             const hasNumber = /\d/.test(password);
+            const hasSymbol = /[!@#$%^&*]/.test(password);
             
             // Update requirement indicators
             reqLength.className = hasLength ? 'requirement-met' : 'requirement-not-met';
             reqLetter.className = hasLetter ? 'requirement-met' : 'requirement-not-met';
             reqNumber.className = hasNumber ? 'requirement-met' : 'requirement-not-met';
+            reqSymbol.className = hasSymbol ? 'requirement-met' : 'requirement-not-met';
             
-            return hasLength && hasLetter && hasNumber;
+            return hasLength && hasLetter && hasNumber && hasSymbol;
         }
 
         // Create account function
@@ -4393,9 +4573,17 @@
                 showLoginPage();
             });
             
-            // Password requirement validation
+            // NEW: Password strength validation
             createPassword.addEventListener('input', () => {
-                validatePassword(createPassword.value);
+                const password = createPassword.value;
+                updatePasswordStrength(password);
+                validatePassword(password);
+                checkPasswordMatch();
+            });
+            
+            // NEW: Password match validation
+            confirmPasswordInput.addEventListener('input', () => {
+                checkPasswordMatch();
             });
             
             // Login tab events
@@ -4611,9 +4799,23 @@
                 saveItem();
             });
             
-            // Update image preview when image URL changes
-            itemImageInput.addEventListener('input', () => {
-                updateImagePreview(itemImageInput.value);
+            // Choose image button
+            chooseImageBtn.addEventListener('click', () => {
+                itemImageFileInput.click();
+            });
+            
+            // Update image preview when file is selected
+            itemImageFileInput.addEventListener('change', () => {
+                const file = itemImageFileInput.files[0];
+                if (file) {
+                    const imageUrl = URL.createObjectURL(file);
+                    updateImagePreview(imageUrl);
+                }
+            });
+            
+            // Update image preview when URL changes
+            itemImageUrlInput.addEventListener('input', () => {
+                updateImagePreview(itemImageUrlInput.value);
             });
             
             // Item actions (delegated event)
@@ -4680,6 +4882,14 @@
             loginPage.style.display = 'none';
             createAccountPage.style.display = 'flex';
             createAccountError.textContent = '';
+            
+            // REMOVED: Apply the new animation to the create account container
+            // createAccountContainer.classList.add('create-account-slide');
+            
+            // REMOVED: Remove the animation class after it completes to allow it to be reapplied
+            // setTimeout(() => {
+            //     createAccountContainer.classList.remove('create-account-slide');
+            // }, 800);
         }
 
         // Show login page
