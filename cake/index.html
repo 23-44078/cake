@@ -80,25 +80,21 @@
             }
         }
 
-        /* REMOVED: Create Account Page Animation - Cube Effect */
-        /* .create-account-slide {
-            animation: createAccountCube 1s ease-out;
+        /* NEW: Create Account Page Animation */
+        .create-account-slide {
+            animation: createAccountSlide 0.8s ease-out;
         }
 
-        @keyframes createAccountCube {
+        @keyframes createAccountSlide {
             0% {
                 opacity: 0;
-                transform: rotateY(90deg) scale(0.8);
-            }
-            50% {
-                opacity: 0.7;
-                transform: rotateY(-10deg) scale(0.9);
+                transform: translateX(50px) scale(0.95);
             }
             100% {
                 opacity: 1;
-                transform: rotateY(0deg) scale(1);
+                transform: translateX(0) scale(1);
             }
-        } */
+        }
 
         .login-logo {
             display: flex;
@@ -266,60 +262,6 @@
 
         .toggle-password:hover {
             color: var(--primary);
-        }
-
-        /* NEW: Password Validation Styles */
-        .password-strength {
-            margin-top: 10px;
-            font-size: 12px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .strength-indicator {
-            height: 4px;
-            flex: 1;
-            margin: 0 2px;
-            border-radius: 2px;
-            background-color: var(--light-gray);
-            transition: var(--transition);
-        }
-
-        .strength-indicator.active {
-            background-color: var(--success);
-        }
-
-        .strength-indicator.weak {
-            background-color: var(--danger);
-        }
-
-        .strength-indicator.medium {
-            background-color: var(--warning);
-        }
-
-        .strength-indicator.strong {
-            background-color: var(--success);
-        }
-
-        /* REMOVED: Password Requirements Section */
-        .password-requirements {
-            display: none; /* Hide the password requirements */
-        }
-
-        .password-match {
-            margin-top: 5px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .password-match.valid {
-            color: var(--success);
-        }
-
-        .password-match.invalid {
-            color: var(--danger);
         }
 
         /* Dashboard Styles */
@@ -2196,6 +2138,30 @@
             text-decoration: underline;
         }
 
+        /* Password Requirements Styles */
+        .password-requirements {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--gray);
+            display: none; /* HIDDEN AS REQUESTED */
+        }
+
+        .password-requirements ul {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+
+        .requirement-met {
+            color: var(--success);
+        }
+
+        .requirement-not-met {
+            color: var(--danger);
+        }
+
         /* Cancel History Section Styles */
         .cancel-history-container {
             background-color: white;
@@ -2560,14 +2526,15 @@
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
-                    <!-- NEW: Password Strength Indicator -->
-                    <div class="password-strength">
-                        <div class="strength-indicator" id="strength-1"></div>
-                        <div class="strength-indicator" id="strength-2"></div>
-                        <div class="strength-indicator" id="strength-3"></div>
-                        <div class="strength-indicator" id="strength-4"></div>
+                    <div class="password-requirements">
+                        <p>Password must contain:</p>
+                        <ul>
+                            <li id="req-length" class="requirement-not-met">At least 8 characters</li>
+                            <li id="req-letter" class="requirement-not-met">At least one letter</li>
+                            <li id="req-number" class="requirement-not-met">At least one number</li>
+                            <li id="req-symbol" class="requirement-not-met">At least one symbol (!@#$%^&*)</li>
+                        </ul>
                     </div>
-                    <!-- REMOVED: Password Requirements Section -->
                 </div>
                 <div class="form-group">
                     <label for="confirm-password">Confirm Password</label>
@@ -2576,11 +2543,6 @@
                         <button type="button" class="toggle-password" id="toggle-confirm-password">
                             <i class="fas fa-eye"></i>
                         </button>
-                    </div>
-                    <!-- NEW: Password Match Indicator -->
-                    <div class="password-match" id="password-match">
-                        <i class="fas fa-times"></i>
-                        <span>Passwords do not match</span>
                     </div>
                 </div>
                 
@@ -3309,13 +3271,6 @@
         const reqNumber = document.getElementById('req-number');
         const reqSymbol = document.getElementById('req-symbol');
 
-        // NEW: Password strength indicators
-        const strengthIndicator1 = document.getElementById('strength-1');
-        const strengthIndicator2 = document.getElementById('strength-2');
-        const strengthIndicator3 = document.getElementById('strength-3');
-        const strengthIndicator4 = document.getElementById('strength-4');
-        const passwordMatch = document.getElementById('password-match');
-
         // Suggestion Dropdown Element
         const emailSuggestions = document.getElementById('email-suggestions');
 
@@ -3416,81 +3371,6 @@
             
             // Move any existing delivered orders to history
             moveDeliveredOrdersToHistory();
-        }
-
-        // NEW: Update password strength indicators
-        function updatePasswordStrength(password) {
-            // Reset all indicators
-            strengthIndicator1.className = 'strength-indicator';
-            strengthIndicator2.className = 'strength-indicator';
-            strengthIndicator3.className = 'strength-indicator';
-            strengthIndicator4.className = 'strength-indicator';
-            
-            if (!password) return;
-            
-            // Calculate strength
-            let strength = 0;
-            
-            // Length check
-            if (password.length >= 8) {
-                strength++;
-                strengthIndicator1.className = 'strength-indicator active';
-            }
-            
-            // Letter check
-            if (/[a-zA-Z]/.test(password)) {
-                strength++;
-                strengthIndicator2.className = 'strength-indicator active';
-            }
-            
-            // Number check
-            if (/\d/.test(password)) {
-                strength++;
-                strengthIndicator3.className = 'strength-indicator active';
-            }
-            
-            // Symbol check
-            if (/[!@#$%^&*]/.test(password)) {
-                strength++;
-                strengthIndicator4.className = 'strength-indicator active';
-            }
-            
-            // Set strength class
-            if (strength > 0) {
-                const indicators = [strengthIndicator1, strengthIndicator2, strengthIndicator3, strengthIndicator4];
-                for (let i = 0; i < strength; i++) {
-                    if (strength === 1) {
-                        indicators[i].classList.add('weak');
-                    } else if (strength === 2) {
-                        indicators[i].classList.add('medium');
-                    } else if (strength >= 3) {
-                        indicators[i].classList.add('strong');
-                    }
-                }
-            }
-        }
-
-        // NEW: Check if passwords match
-        function checkPasswordMatch() {
-            const password = createPassword.value;
-            const confirmPassword = confirmPasswordInput.value;
-            
-            if (!password || !confirmPassword) {
-                passwordMatch.style.display = 'none';
-                return false;
-            }
-            
-            if (password === confirmPassword) {
-                passwordMatch.innerHTML = '<i class="fas fa-check"></i><span>Passwords match</span>';
-                passwordMatch.className = 'password-match valid';
-                passwordMatch.style.display = 'flex';
-                return true;
-            } else {
-                passwordMatch.innerHTML = '<i class="fas fa-times"></i><span>Passwords do not match</span>';
-                passwordMatch.className = 'password-match invalid';
-                passwordMatch.style.display = 'flex';
-                return false;
-            }
         }
 
         // Update suggestion dropdown based on selected role
@@ -4573,17 +4453,9 @@
                 showLoginPage();
             });
             
-            // NEW: Password strength validation
+            // Password requirement validation
             createPassword.addEventListener('input', () => {
-                const password = createPassword.value;
-                updatePasswordStrength(password);
-                validatePassword(password);
-                checkPasswordMatch();
-            });
-            
-            // NEW: Password match validation
-            confirmPasswordInput.addEventListener('input', () => {
-                checkPasswordMatch();
+                validatePassword(createPassword.value);
             });
             
             // Login tab events
@@ -4883,13 +4755,13 @@
             createAccountPage.style.display = 'flex';
             createAccountError.textContent = '';
             
-            // REMOVED: Apply the new animation to the create account container
-            // createAccountContainer.classList.add('create-account-slide');
+            // Apply the new animation to the create account container
+            createAccountContainer.classList.add('create-account-slide');
             
-            // REMOVED: Remove the animation class after it completes to allow it to be reapplied
-            // setTimeout(() => {
-            //     createAccountContainer.classList.remove('create-account-slide');
-            // }, 800);
+            // Remove the animation class after it completes to allow it to be reapplied
+            setTimeout(() => {
+                createAccountContainer.classList.remove('create-account-slide');
+            }, 800);
         }
 
         // Show login page
