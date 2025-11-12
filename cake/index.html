@@ -80,20 +80,21 @@
             }
         }
 
-        /* NEW: Create Account Page Animation */
-        .create-account-slide {
-            animation: createAccountSlide 0.8s ease-out;
+        /* NEW: Shake animation for wrong credentials */
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            10%, 30%, 50%, 70%, 90% {
+                transform: translateX(-10px);
+            }
+            20%, 40%, 60%, 80% {
+                transform: translateX(10px);
+            }
         }
 
-        @keyframes createAccountSlide {
-            0% {
-                opacity: 0;
-                transform: translateX(50px) scale(0.95);
-            }
-            100% {
-                opacity: 1;
-                transform: translateX(0) scale(1);
-            }
+        .shake {
+            animation: shake 0.5s ease-in-out;
         }
 
         .login-logo {
@@ -1990,53 +1991,6 @@
             margin-bottom: 4px;
         }
 
-        /* README Section Styles */
-        .readme-section {
-            background-color: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
-        }
-
-        .readme-section h3 {
-            margin-bottom: 15px;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.1rem;
-        }
-
-        .readme-content {
-            line-height: 1.7;
-            color: var(--gray);
-            font-size: 14px;
-        }
-
-        .readme-content h4 {
-            margin: 15px 0 10px;
-            color: var(--dark);
-            font-size: 16px;
-        }
-
-        .readme-content ul {
-            margin-left: 20px;
-            margin-bottom: 15px;
-        }
-
-        .readme-content li {
-            margin-bottom: 8px;
-        }
-
-        .readme-content code {
-            background-color: var(--light-gray);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 13px;
-        }
-
         /* Suggestion Dropdown Styles */
         .suggestion-dropdown {
             position: absolute;
@@ -2443,12 +2397,58 @@
                 width: 100%;
             }
         }
+
+        /* NEW: Bounce Animation for Login and Create Account Pages */
+        .bounce-animation {
+            animation: bounceIn 1s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* NEW: Bounce animation for form elements */
+        .bounce-form-element {
+            animation: bounceFormElement 0.6s ease-out;
+        }
+
+        @keyframes bounceFormElement {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(-5px);
+            }
+            70% {
+                transform: translateY(2px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
     <!-- Login Page -->
     <div class="login-page" id="login-page">
-        <div class="login-container" id="login-container">
+        <div class="login-container bounce-animation" id="login-container">
             <div class="login-logo">
                 <div class="login-logo-img">
                     <img src="image/Cream & Black Aesthetic Cake & Dessert Logo.png" alt="Sweet Delights Cake Logo">
@@ -2465,7 +2465,7 @@
             
             <!-- Login Form -->
             <form id="login-form" class="login-form active">
-                <div class="form-group">
+                <div class="form-group bounce-form-element">
                     <label for="login-email">Email</label>
                     <input type="email" id="login-email" required autocomplete="off" placeholder="Enter your email">
                     <!-- Suggestion Dropdown -->
@@ -2473,7 +2473,7 @@
                         <!-- Suggestions will be dynamically added here -->
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group bounce-form-element">
                     <label for="login-password">Password</label>
                     <div class="password-container">
                         <input type="password" id="login-password" required placeholder="Enter your password">
@@ -2483,14 +2483,14 @@
                     </div>
                 </div>
                 
-                <div id="login-error" class="login-error"></div>
-                <button type="submit" class="checkout-btn">
+                <div id="login-error" class="login-error bounce-form-element"></div>
+                <button type="submit" class="checkout-btn bounce-form-element">
                     <i class="fas fa-sign-in-alt"></i>
                     Login
                 </button>
                 
                 <!-- Create Account Button -->
-                <button type="button" class="create-account-btn" id="show-create-account">
+                <button type="button" class="create-account-btn bounce-form-element" id="show-create-account">
                     <i class="fas fa-user-plus"></i>
                     Create Account
                 </button>
@@ -2500,7 +2500,7 @@
 
     <!-- Create Account Page (Hidden by default) -->
     <div class="login-page" id="create-account-page" style="display: none;">
-        <div class="login-container" id="create-account-container">
+        <div class="login-container bounce-animation" id="create-account-container">
             <div class="login-logo">
                 <div class="login-logo-img">
                     <img src="image/Cream & Black Aesthetic Cake & Dessert Logo.png" alt="Sweet Delights Cake Logo">
@@ -2510,15 +2510,15 @@
             
             <!-- Create Account Form -->
             <form id="create-account-form">
-                <div class="form-group">
+                <div class="form-group bounce-form-element">
                     <label for="create-name">Full Name</label>
                     <input type="text" id="create-name" required autocomplete="off" placeholder="Enter your full name">
                 </div>
-                <div class="form-group">
+                <div class="form-group bounce-form-element">
                     <label for="create-email">Email</label>
                     <input type="email" id="create-email" required autocomplete="off" placeholder="Enter your email">
                 </div>
-                <div class="form-group">
+                <div class="form-group bounce-form-element">
                     <label for="create-password">Password</label>
                     <div class="password-container">
                         <input type="password" id="create-password" required placeholder="Create a password">
@@ -2536,7 +2536,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group bounce-form-element">
                     <label for="confirm-password">Confirm Password</label>
                     <div class="password-container">
                         <input type="password" id="confirm-password" required placeholder="Confirm your password">
@@ -2546,13 +2546,13 @@
                     </div>
                 </div>
                 
-                <div id="create-account-error" class="login-error"></div>
-                <button type="submit" class="checkout-btn" id="create-account-submit">
+                <div id="create-account-error" class="login-error bounce-form-element"></div>
+                <button type="submit" class="checkout-btn bounce-form-element" id="create-account-submit">
                     <i class="fas fa-user-plus"></i>
                     Create Account
                 </button>
                 
-                <div class="form-switch">
+                <div class="form-switch bounce-form-element">
                     Already have an account? <a id="show-login">Login here</a>
                 </div>
             </form>
@@ -2785,65 +2785,6 @@
                     <!-- About Us Section -->
                     <div id="about-us" class="section">
                         <h2 class="section-title"><i class="fas fa-info-circle"></i> About Sweet Delights</h2>
-                        
-                        <!-- README Section -->
-                        <div class="readme-section">
-                            <h3><i class="fas fa-book" style="color: var(--primary);"></i> README </h3>
-                            <div class="readme-content">
-                                <h4>About Sweet Delights Cake Ordering System</h4>
-                                <p>This is a comprehensive cake ordering system designed to provide a seamless experience for customers, staff, and administrators. The system allows customers to browse cakes, place orders, track their delivery, and view order history.</p>
-                                
-                                <h4>System Features</h4>
-                                <ul>
-                                    <li><strong>Customer Features:</strong> Browse menu, add items to cart, place orders, track orders, view order history, view cancel history</li>
-                                    <li><strong>Staff Features:</strong> View and update order statuses</li>
-                                    <li><strong>Admin Features:</strong> Manage users, manage menu items</li>
-                                </ul>
-                                
-                                <h4>How to Use</h4>
-                                <p><strong>For Customers:</strong></p>
-                                <ol>
-                                    <li>Login with customer credentials</li>
-                                    <li>Browse the cake menu and add items to your cart</li>
-                                    <li>Proceed to checkout and select payment method (GCash or Cash on Delivery)</li>
-                                    <li>Track your order status in real-time</li>
-                                    <li>View your order history for past purchases</li>
-                                    <li>View your cancel history for cancelled orders</li>
-                                </ol>
-                                
-                                <p><strong>For Staff:</strong></p>
-                                <ol>
-                                    <li>Login with staff credentials</li>
-                                    <li>View all orders in the system</li>
-                                    <li>Update order status as they progress through preparation and delivery</li>
-                                </ol>
-                                
-                                <p><strong>For Admin:</strong></p>
-                                <ol>
-                                    <li>Login with admin credentials</li>
-                                    <li>Manage all users in the system</li>
-                                    <li>Manage menu items (add, edit, delete)</li>
-                                    
-                                </ol>
-                                
-                                <h4>Payment Methods</h4>
-                                <p>The system supports two payment methods:</p>
-                                <ul>
-                                    <li><strong>GCash:</strong> Digital payment through the GCash app</li>
-                                    <li><strong>Cash on Delivery:</strong> Pay with cash when your order is delivered</li>
-                                </ul>
-                                
-                                <h4>Order Statuses</h4>
-                                <p>Orders progress through the following statuses:</p>
-                                <ul>
-                                    <li><strong>Pending:</strong> Order received, awaiting processing</li>
-                                    <li><strong>Preparing:</strong> Order is being prepared</li>
-                                    <li><strong>Ready:</strong> Order is ready for delivery</li>
-                                    <li><strong>Delivered:</strong> Order has been successfully delivered</li>
-                                    <li><strong>Cancelled:</strong> Order has been cancelled</li>
-                                </ul>
-                            </div>
-                        </div>
                         
                         <div class="mission-vision">
                             <div class="mission-card">
@@ -3371,6 +3312,17 @@
             
             // Move any existing delivered orders to history
             moveDeliveredOrdersToHistory();
+        }
+
+        // NEW: Function to trigger shake effect (vibration removed)
+        function triggerWrongCredentialsEffect(container) {
+            // Add shake animation class
+            container.classList.add('shake');
+            
+            // Remove shake class after animation completes
+            setTimeout(() => {
+                container.classList.remove('shake');
+            }, 500);
         }
 
         // Update suggestion dropdown based on selected role
@@ -4419,6 +4371,8 @@
                     showNotification(`Welcome, ${user.name}!`, 'success');
                 } else {
                     loginError.textContent = `Invalid ${selectedLoginRole} credentials. Please try again.`;
+                    // NEW: Trigger shake effect (vibration removed)
+                    triggerWrongCredentialsEffect(loginContainer);
                 }
             });
             
@@ -4440,6 +4394,9 @@
                     // Show success notification and return to login page
                     showNotification('Account created successfully! You can now log in.', 'success');
                     showLoginPage();
+                } else {
+                    // NEW: Trigger shake effect for create account errors (vibration removed)
+                    triggerWrongCredentialsEffect(createAccountContainer);
                 }
             });
             
@@ -4754,14 +4711,6 @@
             loginPage.style.display = 'none';
             createAccountPage.style.display = 'flex';
             createAccountError.textContent = '';
-            
-            // Apply the new animation to the create account container
-            createAccountContainer.classList.add('create-account-slide');
-            
-            // Remove the animation class after it completes to allow it to be reapplied
-            setTimeout(() => {
-                createAccountContainer.classList.remove('create-account-slide');
-            }, 800);
         }
 
         // Show login page
