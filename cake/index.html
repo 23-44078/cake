@@ -3150,21 +3150,58 @@
         let orders = [];
         let orderHistory = [];
         let cancelHistory = [];
-        let users = [
+        
+        // Load users from localStorage or use default users
+        let users = JSON.parse(localStorage.getItem('sweetDelightsUsers')) || [
             { id: 1, name: "Customer User", role: "customer", username: "customer", password: "Cust-123!", email: "customer@gmail.com" },
             { id: 2, name: "Staff User", role: "staff", username: "staff", password: "Staff-123!", email: "staff@gmail.com" },
             { id: 3, name: "Admin User", role: "admin", username: "admin", password: "Admin-123!", email: "admin@gmail.com" }
         ];
 
+        // Save users to localStorage
+        function saveUsersToLocalStorage() {
+            localStorage.setItem('sweetDelightsUsers', JSON.stringify(users));
+        }
+
+        // Load other data from localStorage
+        function loadDataFromLocalStorage() {
+            const savedMenuItems = localStorage.getItem('sweetDelightsMenuItems');
+            const savedOrders = localStorage.getItem('sweetDelightsOrders');
+            const savedOrderHistory = localStorage.getItem('sweetDelightsOrderHistory');
+            const savedCancelHistory = localStorage.getItem('sweetDelightsCancelHistory');
+            const savedCurrentOrderId = localStorage.getItem('sweetDelightsCurrentOrderId');
+            const savedNextUserId = localStorage.getItem('sweetDelightsNextUserId');
+            const savedNextItemId = localStorage.getItem('sweetDelightsNextItemId');
+            
+            if (savedMenuItems) menuItems = JSON.parse(savedMenuItems);
+            if (savedOrders) orders = JSON.parse(savedOrders);
+            if (savedOrderHistory) orderHistory = JSON.parse(savedOrderHistory);
+            if (savedCancelHistory) cancelHistory = JSON.parse(savedCancelHistory);
+            if (savedCurrentOrderId) currentOrderId = parseInt(savedCurrentOrderId);
+            if (savedNextUserId) nextUserId = parseInt(savedNextUserId);
+            if (savedNextItemId) nextItemId = parseInt(savedNextItemId);
+        }
+
+        // Save data to localStorage
+        function saveDataToLocalStorage() {
+            localStorage.setItem('sweetDelightsMenuItems', JSON.stringify(menuItems));
+            localStorage.setItem('sweetDelightsOrders', JSON.stringify(orders));
+            localStorage.setItem('sweetDelightsOrderHistory', JSON.stringify(orderHistory));
+            localStorage.setItem('sweetDelightsCancelHistory', JSON.stringify(cancelHistory));
+            localStorage.setItem('sweetDelightsCurrentOrderId', currentOrderId.toString());
+            localStorage.setItem('sweetDelightsNextUserId', nextUserId.toString());
+            localStorage.setItem('sweetDelightsNextItemId', nextItemId.toString());
+        }
+
         let currentUser = null;
-        let currentOrderId = 1001;
-        let nextUserId = 4;
+        let currentOrderId = parseInt(localStorage.getItem('sweetDelightsCurrentOrderId')) || 1001;
+        let nextUserId = parseInt(localStorage.getItem('sweetDelightsNextUserId')) || 4;
         let selectedLoginRole = 'customer';
         let userLocation = null;
         let orderToCancel = null;
 
         // Variables for item management
-        let nextItemId = 7; // Starting after the initial 6 items
+        let nextItemId = parseInt(localStorage.getItem('sweetDelightsNextItemId')) || 7; // Starting after the initial 6 items
         let editingItemId = null;
         let deletingItemId = null;
 
@@ -3303,6 +3340,9 @@
 
         // Initialize the application
         function init() {
+            // Load data from localStorage
+            loadDataFromLocalStorage();
+            
             setupEventListeners();
             renderMenuItems();
             updateCartCount();
@@ -4008,6 +4048,9 @@
             // Remove completed orders from current orders
             orders = orders.filter(order => order.status !== 'delivered' && order.status !== 'cancelled');
             
+            // Save data to localStorage
+            saveDataToLocalStorage();
+            
             // Update order history display if on that page
             if (document.getElementById('order-history').classList.contains('active')) {
                 renderOrderHistory();
@@ -4142,6 +4185,9 @@
                 showNotification('Item added successfully', 'success');
             }
             
+            // Save data to localStorage
+            saveDataToLocalStorage();
+            
             // Update UI
             renderItemsTable();
             renderItemsSummary();
@@ -4163,6 +4209,9 @@
             if (deletingItemId) {
                 menuItems = menuItems.filter(item => item.id !== deletingItemId);
                 showNotification('Item deleted successfully', 'success');
+                
+                // Save data to localStorage
+                saveDataToLocalStorage();
                 
                 // Update UI
                 renderItemsTable();
@@ -4236,6 +4285,9 @@
                 showNotification('User updated successfully', 'success');
             }
             
+            // Save users to localStorage
+            saveUsersToLocalStorage();
+            
             // Update UI
             renderUsersTable();
             renderUsersSummary();
@@ -4264,6 +4316,9 @@
                 
                 users = users.filter(user => user.id !== deletingUserId);
                 showNotification('User deleted successfully', 'success');
+                
+                // Save users to localStorage
+                saveUsersToLocalStorage();
                 
                 // Update UI
                 renderUsersTable();
@@ -4342,6 +4397,10 @@
             };
 
             users.push(newUser);
+            
+            // Save users to localStorage
+            saveUsersToLocalStorage();
+            
             // Clear any previous error
             createAccountError.textContent = '';
             return newUser;
@@ -4743,6 +4802,9 @@
             
             orders.push(order);
             
+            // Save data to localStorage
+            saveDataToLocalStorage();
+            
             // Update GCash order ID for next order
             gcashOrderIdElement.textContent = `#${currentOrderId}`;
             
@@ -4878,6 +4940,9 @@
                         renderCancelHistory();
                     }
                 }
+                
+                // Save data to localStorage
+                saveDataToLocalStorage();
                 
                 renderOrdersTable();
                 showNotification(`Order #${orderId} status updated to ${newStatus}`, 'success');
